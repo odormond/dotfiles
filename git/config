@@ -1,0 +1,18 @@
+# This is Git's per-user configuration file.
+[user]
+    name = Olivier Dormond
+[merge]
+    renamelimit = 2000
+[alias]
+    graph = log --graph --oneline --decorate --branches --remotes --tags
+    changelog = "!f(){ echo \"## Changelog from $1 to $2\" && git log $1...$2 --pretty=format:\" * %s [view commit]($(git config --get remote.origin.url | sed -e's+:+/+' -e's+git@+http://+' -e's+.git+/commits/%H+'))\" | grep -v ^Merged; };f"
+[push]
+    default = simple
+[rebase]
+    autosquash = true
+[fetch]
+    prune = true
+[include]
+    path = ~/.dotfiles/git/local
+
+# vim:ft=gitconfig

@@ -1,0 +1,7 @@
+git/local
+python/hashpass.secret
+tmux/local.conf
+vim/tmp
+vim/plugged
+vim/spell
+vim/autosess

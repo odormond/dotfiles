@@ -1,0 +1,19 @@
+alias vi=`which vim`
+alias python='python3'
+alias grep='grep --exclude-dir __pycache__ --exclude-dir .git --exclude-dir .tox --color=auto'
+alias fgrep='fgrep --exclude-dir __pycache__ --exclude-dir .git --exclude-dir .tox --color=auto'
+alias egrep='egrep --exclude-dir __pycache__ --exclude-dir .git --exclude-dir .tox --color=auto'
+alias ls='ls --color=auto'
+alias ll='ls --color=auto -lF'
+alias lsa='ls --color=auto -AF'
+alias lla='ls --color=auto -alF'
+alias ga='git add'
+alias gc='git commit'
+alias gco='git checkout'
+alias gd='git diff'
+alias gf='git fetch'
+alias gg='git graph'
+alias gl='git log -p'
+alias gs='git status'
+
+# vim:ft=sh

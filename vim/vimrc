@@ -1,0 +1,370 @@
+" Environment
+set nocompatible
+scriptencoding utf-8
+set termencoding=utf-8
+set encoding=utf-8
+
+" Directories for various vim support files
+silent execute '!mkdir -p $HOME/.vim/tmp/{backup,swap,view,undo}'
+set backupdir=~/.vim/tmp/backup/
+set backup
+set directory=~/.vim/tmp/swap/
+set viewdir=~/.vim/tmp/view/
+set undodir=~/.vim/undo
+set undofile
+set viminfo=!,'100,<50,s10,h,n~/.vim/tmp/viminfo
+
+" Easier to reach <Leader>
+let mapleader=","
+let maplocalleader=mapleader " Same char for buffer local leader
+
+" Editing
+set expandtab
+set tabstop=4
+set shiftwidth=4
+"set fileencodings=utf-8
+set nojoinspaces
+set nostartofline
+set autoindent
+set nowrap
+
+" Visuals
+set visualbell
+set title
+set foldmethod=syntax
+set foldenable
+set foldlevel=99
+set foldtext=MyFoldText()
+function! MyFoldText()
+  let line = getline(v:foldstart)
+  let space = substitute(line, '\s\?\S.*', '', '')
+  let indent = substitute(substitute(line, '\s\?\S.*', '', ''), '\s', '-', 'g')
+  let text = substitute(line, '^\s*', '', '')
+  let n_lines = v:foldend - v:foldstart + 1
+  if indent != ''
+    let indent = indent . ' '
+  endif
+  return printf("%s%s (%d lines)", indent, text, n_lines)
+endfunction
+syntax on " Before setting colorscheme because it reset colors
+set number
+set relativenumber
+set numberwidth=3
+set modelines=5
+set modeline
+set noshowmode
+set showcmd
+" search improvements
+set incsearch
+set hlsearch  " hide highlighting with :nohls instead of unsetting it
+"nnoremap <silent> n n:call HLNext(0.01, 2)<cr>
+"nnoremap <silent> N N:call HLNext(0.01, 2)<cr>
+"function! HLNext (blinktime, count)
+"  let [bufnum, lnum, col, off] = getpos('.')
+"  let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+"  let target_pat = '\c\%#'.@/
+"  let counter = a:count
+"  while counter
+"    let ring = matchadd('SearchHl', target_pat, 101)
+"    redraw
+"    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+"    call matchdelete(ring)
+"    redraw
+"    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+"    let counter -= 1
+"  endwhile
+"endfunction
+" command line completion improvements
+set wildmenu
+set wildmode=longest:full,full
+set wildignore=*.pyc,*.pyo,*.o,*.a,*.la
+"set list
+set listchars=eol:↵,tab:⇥\ ,trail:⏘,extends:⇢,precedes:⇠,conceal:\ ,nbsp:⏙
+"set showbreak=↪ " For consistency with list mode but useless due to numberline
+set ttyfast " should always be true nowadays
+"set lazyredraw
+set ruler
+set splitbelow splitright
+set shortmess=afilmnrxoOtT
+set backspace=indent,eol,start
+set spelllang=en_gb,fr
+set shiftround
+set timeoutlen=300
+set ttimeoutlen=50
+
+
+"set synmaxcol=256 " Don't look to far away for syntax highlighting. Will speed things up.
+"set colorcolumn=80,160,240
+set colorcolumn=100,200
+colorscheme odie
+
+
+" Diff
+set diffopt+=iwhite,vertical
+
+" Window navigation
+" ^l is redefined from the default mapping meaning to clear and redraw
+" the screen.
+"nnoremap <C-h> <C-w>h
+"nnoremap <C-j> <C-w>j
+"nnoremap <C-k> <C-w>k
+"nnoremap <C-l> <C-w>l
+nnoremap <C-w>1 1<C-w><C-w>
+nnoremap <C-w>2 2<C-w><C-w>
+nnoremap <C-w>3 3<C-w><C-w>
+nnoremap <C-w>4 4<C-w><C-w>
+nnoremap <C-w>5 5<C-w><C-w>
+nnoremap <C-w>6 6<C-w><C-w>
+nnoremap <C-w>7 7<C-w><C-w>
+nnoremap <C-w>8 8<C-w><C-w>
+nnoremap <C-w>9 9<C-w><C-w>
+
+" Window spliting
+nnoremap <C-w>" :vsplit<cr>
+nnoremap <C-w>= :split<cr>
+
+" regular shape for visual block
+set virtualedit=block
+
+" easier alteration of indentation of code blocks by keeping the visual selection alive
+vnoremap < <gv
+vnoremap > >gv
+
+" don't override the yanked text by the replaced one
+xnoremap p pgvy
+
+" Search uses classical regexes instead of vim ones
+nnoremap / /\v
+vnoremap / /\v
+nnoremap ? ?\v
+vnoremap ? ?\v
+
+" complement pair matching:
+set matchpairs+="<:>,«:»"
+
+" Avoid moving so far away
+inoremap jk <Esc>
+inoremap kj <Esc>
+" enforce forgetting about the cursor keys
+noremap <Up> <nop>
+noremap <Down> <nop>
+noremap <Left> <nop>
+noremap <Right> <nop>
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
+
+" quick toggle of paste mode
+nmap <Leader>o :set paste!<cr>
+
+" Block dragging and dupplication
+vmap  <expr>  <Left>   DVB_Drag('left')
+vmap  <expr>  <Right>  DVB_Drag('right')
+vmap  <expr>  <Down>   DVB_Drag('down')
+vmap  <expr>  <Up>     DVB_Drag('up')
+vmap  <expr>  D        DVB_Duplicate()
+" remove any introduced trailing whitespace after moving
+let g:DVB_TrimWS = 1
+
+" Show changes made to the current buffer that are not saved yet.
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+
+augroup vimrc
+  autocmd!
+
+  " automatically reload vimrc when it's saved
+  au BufWritePost .vimrc so ~/.vimrc
+  au BufWritePost vimrc so ~/.vimrc
+  
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+"" For all text files
+"autocmd FileType text setlocal textwidth=78
+"autocmd FileType text setlocal formatoptions=tcqlna1r
+"autocmd FileType text let b:SuperTabDisabled = 1
+"autocmd BufRead,BufNewFile *.todo setf todo
+"autocmd BufRead,BufNewFile *.rest setf rest
+""autocmd BufRead,BufNewFile *      setf txt
+"
+"" For mails
+"autocmd FileType mail setlocal textwidth=72
+"autocmd FileType mail setlocal formatoptions=tcqln21r
+"autocmd FileType mail let b:SuperTabDisabled = 1
+"let g:mail_erase_quoted_sig = 1
+"let g:mail_delete_empty_quoted = 1
+""let g:mail_cursor_start = 1
+"
+"" For vim script
+"autocmd FileType vim setlocal formatoptions-=t
+"
+"au User VCSBufferCreated silent! nmap <unique> <buffer> q :bwipeout<cr>
+""  au User VCSPluginFinish set statusline=%<%f\ %y\ %{VCSCommandGetStatusLine()}\ %h%m%r%=%l,%c%V\ %P
+""let VCSCommandEnableBufferSetup=1
+"
+"" MUA
+"let g:MUA_me="olivier@mnc.ch,olivier.dormond@mnc.ch"
+"
+"" For python script
+"function! PyRun ()
+"  if filereadable("/tmp/vimpy.sock") && filewritable("/tmp/vimpy.sock")
+"    python import socket, vim; socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM).sendto(vim.current.buffer.name, '/tmp/vimpy.sock')
+"  else
+"    ! python %
+"  endif
+"endfunction
+"autocmd FileType python command! Run call PyRun()
+""autocmd FileType python setlocal statusline=%<%f\ (%{&fileencoding})\ %y\ %{PythonScopesStatus()}\ %h%m%r%=%l,%c%V\ %P
+"autocmd BufNewFile,BufRead *.py compiler python
+"let python_space_error_highlight=1
+"nmap <Leader>sp i#! /usr/bin/env python<cr># coding: UTF-8<cr><cr>from __future__ import division<cr>from __future__ import absolute_import<cr>from __future__ import print_function<cr>from __future__ import unicode_literals<cr><cr>
+"
+augroup END
+
+" Type saving abbreviations
+"iab #!p #!/usr/bin/env python<cr># coding:UTF-8<cr>  " with jedi, vim goes wild
+
+" Automatic sessions
+"function! MakeSession()
+"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+"  if (filewritable(b:sessiondir) != 2)
+"    exe 'silent !mkdir -p ' b:sessiondir
+"    redraw!
+"  endif
+"  let b:filename = b:sessiondir . '/session.vim'
+"  exe "mksession! " . b:filename
+"endfunction
+"
+"function! LoadSession()
+"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
+"  let b:sessionfile = b:sessiondir . "/session.vim"
+"  if (filereadable(b:sessionfile))
+"    exe 'source ' b:sessionfile
+"  else
+"    echo "No session loaded."
+"  endif
+"endfunction
+"
+" Adding automatons for when entering or leaving Vim
+"if (argc() == 0)
+"	au VimEnter * nested :call LoadSession()
+"	au VimLeave * :call MakeSession()
+"endif
+
+" Specify a directory for plugins
+call plug#begin('~/.vim/plugged')
+
+"====== python completion with jedi ======
+set completeopt=menuone,longest
+"set completeopt=longest,menuone
+let g:jedi#use_splits_not_buffers="bottom"
+"let g:jedi#auto_vim_configuration = 0
+"let g:jedi#smart_auto_mappings = 0 " With this automatically insert the 'import' after typing 'from bla<space>'
+let g:jedi#show_call_signatures=0  " Present bug 687 makes any other setting a major pain (was 1)
+"autocmd FileType python setlocal omnifunc=jedi#completions
+Plug 'davidhalter/jedi-vim'
+
+"====== use the tab key for completion ======
+let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabLongestEnhanced=1
+Plug 'ervandew/supertab'
+
+"====== code structure identification and navigation ======
+nnoremap <Leader>t :TagbarToggle<cr>
+nnoremap <Leader>tt :TagbarOpen fj<cr>
+Plug 'majutsushi/tagbar'
+
+"====== Fancy status line with airline =====
+set laststatus=2
+let g:airline_theme="odie"
+let g:airline_powerline_fonts=1
+let g:airline_inactive_collapse=0
+let g:airline#extensions#hunks#enabled=1
+let g:airline#extensions#tagbar#enabled=1
+let g:airline#extensions#tagbar#flags='f'
+let g:airline#extensions#branch#enabled=1
+let g:airline#extensions#branch#use_vcscommand=0
+function! s:setup_airline()
+  let g:airline_section_c=airline#section#create_left(['file', 'readonly', 'tagbar'])
+  let g:airline_section_x=airline#section#create(['filetype'])
+  let g:airline_section_z=airline#section#create([' %{winnr()}β%{bufnr("%")} ', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+endfunction
+autocmd User AirlineAfterInit call s:setup_airline()
+Plug 'vim-airline/vim-airline'
+
+"====== hunk managment with fugitive ======
+Plug 'tpope/vim-fugitive'
+
+"====== extend fugitive with a nice TUI to manage branches ======
+Plug 'idanarye/vim-merginal'
+
+"====== change marker with gitgutter ======
+Plug 'airblade/vim-gitgutter'
+
+"====== git staging management ======
+Plug 'jreybert/vimagit'
+
+"====== advanced text object for blocks delimited by (), {}, [], '', "", <>
+Plug 'kana/vim-textobj-user'  " dependency of vim-textobj-anyblock
+Plug 'rhysd/vim-textobj-anyblock'
+
+"====== surround operation ======
+Plug 'kana/vim-operator-user'  " dependency of vim-operator-surround
+Plug 'rhysd/vim-operator-surround'
+map <silent>sa <Plug>(operator-surround-append)
+map <silent>sd <Plug>(operator-surround-delete)
+map <silent>sr <Plug>(operator-surround-replace)
+
+"====== quicker file/buffer navigation ======
+let g:ctrlp_extensions = ['mixed']
+let g:ctrlp_cmd = 'CtrlPMixed'
+Plug 'ctrlpvim/ctrlp.vim'
+highlight CursorLine cterm=NONE ctermbg=238
+
+"====== improved file explorer ======
+nmap <Leader>/ :NERDTreeToggle<cr>
+let g:NERDTreeIgnore=['\.py[co]$', '\~$']
+let g:NERDTreeQuitOnOpen=1
+let g:NERDTreeDirArrowExpandable = '▸'
+let g:NERDTreeDirArrowCollapsible = '▾'
+Plug 'scrooloose/nerdtree'
+
+"====== simplify unicode character input and info query ======
+Plug 'chrisbra/unicode.vim'
+
+"====== syntax checking with syntastic ======
+let g:syntastic_check_on_open=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_check_on_wq = 0
+let g:syntastic_python_checkers = ["flake8"]
+"let g:syntastic_cursor_column = 0
+Plug 'vim-syntastic/syntastic'
+
+"====== show indentation level with thin marker for space based indentation ======
+" Toggle showmarks and number to allow copying text
+nmap <Leader>, :SyntasticToggleMode<cr>:GitGutterSignsToggle<cr>:IndentLinesToggle<cr>:set number!<cr>:set relativenumber!<cr>
+let g:indentLine_char='┊' " or: ╵╷│┆|¦
+let g:indentLine_color_term=235
+Plug 'Yggdroot/indentLine'
+
+"====== vim tmux navigator, seamless navigation between vim splits and tmux panes ======
+let g:tmux_navigator_no_mappings = 1
+let g:tmux_navigator_disable_when_zoomed = 1
+Plug 'christoomey/vim-tmux-navigator'
+nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
+nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
+nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
+nnoremap <silent> <C-w><C-w> :TmuxNavigatePrevious<cr>
+
+" Add plugins to &runtimepath
+call plug#end()
+
+" vim:ts=2:sw=2
