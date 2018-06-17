@@ -1,12 +1,24 @@
 alias vi=`which vim`
 alias python='python3'
+
 alias grep='grep --exclude-dir __pycache__ --exclude-dir .git --exclude-dir .tox --color=auto'
 alias fgrep='fgrep --exclude-dir __pycache__ --exclude-dir .git --exclude-dir .tox --color=auto'
 alias egrep='egrep --exclude-dir __pycache__ --exclude-dir .git --exclude-dir .tox --color=auto'
-alias ls='ls --color=auto'
-alias ll='ls --color=auto -lF'
-alias lsa='ls --color=auto -AF'
-alias lla='ls --color=auto -alF'
+
+if [ `uname` == Darwin ]; then
+    export CLICOLOR=
+    export LSCOLORS="gxhxfxdxcxgehecbcdacab"
+    alias ls='ls -F'
+    alias ll='ls -lF'
+    alias lsa='ls -aF'
+    alias lla='ls -alF'
+else
+    alias ls='ls --color=auto -F'
+    alias ll='ls --color=auto -lF'
+    alias lsa='ls --color=auto -AF'
+    alias lla='ls --color=auto -alF'
+fi
+
 alias ga='git add'
 alias gc='git commit'
 alias gco='git checkout'

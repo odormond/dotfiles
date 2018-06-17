@@ -63,10 +63,15 @@ else
 fi
 unset color_prompt force_color_prompt
 
+# Preserve virtual env tag in PS1
+if [ -n "$VIRTUAL_ENV" ]; then
+    PS1="($(basename "$VIRTUAL_ENV"))$PS1"
+fi
+
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
     ;;
 *)
     ;;

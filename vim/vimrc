@@ -13,6 +13,7 @@ set viewdir=~/.vim/tmp/view/
 set undodir=~/.vim/undo
 set undofile
 set viminfo=!,'100,<50,s10,h,n~/.vim/tmp/viminfo
+set cryptmethod=blowfish2
 
 " Easier to reach <Leader>
 let mapleader=","
@@ -26,7 +27,6 @@ set shiftwidth=4
 set nojoinspaces
 set nostartofline
 set autoindent
-set nowrap
 
 " Visuals
 set visualbell
@@ -92,9 +92,13 @@ set shiftround
 set timeoutlen=300
 set ttimeoutlen=50
 
+" Line wrapping display tunning
+set nowrap
+set linebreak
+set breakindent
+set breakindentopt=min:20,shift:8
 
-"set synmaxcol=256 " Don't look to far away for syntax highlighting. Will speed things up.
-"set colorcolumn=80,160,240
+set synmaxcol=256 " Don't look to far away for syntax highlighting. Will speed things up.
 set colorcolumn=100,200
 colorscheme odie
 
@@ -103,8 +107,8 @@ colorscheme odie
 set diffopt+=iwhite,vertical
 
 " Window navigation
-" ^l is redefined from the default mapping meaning to clear and redraw
-" the screen.
+" ^l is redefined from the default mapping meaning to clear and redraw the screen.
+" These are redefined in tmux to allow transparent movements between tmux panes and vim windows
 "nnoremap <C-h> <C-w>h
 "nnoremap <C-j> <C-w>j
 "nnoremap <C-k> <C-w>k
@@ -174,8 +178,8 @@ augroup vimrc
   autocmd!
 
   " automatically reload vimrc when it's saved
-  au BufWritePost .vimrc so ~/.vimrc
-  au BufWritePost vimrc so ~/.vimrc
+  au BufWritePost .vimrc so ~/.vim/vimrc
+  au BufWritePost vimrc so ~/.vim/vimrc
   
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
@@ -262,11 +266,12 @@ call plug#begin('~/.vim/plugged')
 
 "====== python completion with jedi ======
 set completeopt=menuone,longest
-"set completeopt=longest,menuone
+"set completeopt=longest,menuone " Erebor had this instead
+let g:jedi#use_tabs_not_buffers=0
 let g:jedi#use_splits_not_buffers="bottom"
 "let g:jedi#auto_vim_configuration = 0
 "let g:jedi#smart_auto_mappings = 0 " With this automatically insert the 'import' after typing 'from bla<space>'
-let g:jedi#show_call_signatures=0  " Present bug 687 makes any other setting a major pain (was 1)
+let g:jedi#show_call_signatures=0  " Present bug 687 makes any other setting a major pain (was 1 on Erebor)
 "autocmd FileType python setlocal omnifunc=jedi#completions
 Plug 'davidhalter/jedi-vim'
 
@@ -304,11 +309,11 @@ Plug 'tpope/vim-fugitive'
 "====== extend fugitive with a nice TUI to manage branches ======
 Plug 'idanarye/vim-merginal'
 
-"====== change marker with gitgutter ======
-Plug 'airblade/vim-gitgutter'
-
 "====== git staging management ======
 Plug 'jreybert/vimagit'
+
+"====== change marker with gitgutter ======
+Plug 'airblade/vim-gitgutter'
 
 "====== advanced text object for blocks delimited by (), {}, [], '', "", <>
 Plug 'kana/vim-textobj-user'  " dependency of vim-textobj-anyblock
@@ -346,6 +351,9 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ["flake8"]
 "let g:syntastic_cursor_column = 0
 Plug 'vim-syntastic/syntastic'
+
+"====== square brackets shortcuts for paired commands ======
+Plug 'tpope/vim-unimpaired'
 
 "====== show indentation level with thin marker for space based indentation ======
 " Toggle showmarks and number to allow copying text
