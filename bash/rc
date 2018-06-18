@@ -89,7 +89,7 @@ function tmux {
 }
 
 function activate {
-    eval `venv_switcher.py`
+    eval `~/.dotfiles/python/venv_switcher.py`
 }
 
 function reactivate {
