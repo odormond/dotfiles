@@ -8,6 +8,7 @@
     changelog = "!f(){ echo \"## Changelog from $1 to $2\" && git log $1...$2 --pretty=format:\" * %s [view commit]($(git config --get remote.origin.url | sed -e's+:+/+' -e's+git@+http://+' -e's+.git+/commits/%H+'))\" | grep -v ^Merged; };f"
 [push]
     default = simple
+    default = current
 [rebase]
     autosquash = true
 [fetch]
