@@ -54,7 +54,8 @@ set modelines=5
 set modeline
 set noshowmode
 set showcmd
-" search improvements
+
+"" search improvements
 set incsearch
 set hlsearch  " hide highlighting with :nohls instead of unsetting it
 "nnoremap <silent> n n:call HLNext(0.01, 2)<cr>
@@ -77,7 +78,30 @@ set hlsearch  " hide highlighting with :nohls instead of unsetting it
 " command line completion improvements
 set wildmenu
 set wildmode=longest:full,full
-set wildignore=*.pyc,*.pyo,*.o,*.a,*.la
+set wildignore=*.pyc,*.pyo,__pycache__
+set wildignore+=*.o,*.a,*.la,*.so
+set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.tiff,*.pdf
+set wildignore+=*.tar,*.gz,*.bz2
+set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
+
+""" file / buffer navigation
+" automaticallly search bellow the current directory
+set path+=**
+" always make the directory containing the edited file the current dir. Follows focus.
+"set autochdir
+" edit file under the cursor in a vertical split
+nnoremap gf :vertical wincmd f<CR>
+" list buffer and prompt
+nnoremap § :ls<CR>:b 
+" switch to alternate buffer in same window
+nnoremap <BS> <C-^>
+" netrw tunning
+let g:netrw_banner=0
+let g:netrw_liststyle=3
+let g:netrw_browse_split=4
+let g:netrw_altv=1
+let g:netrw_winsize=25
+
 "set list
 set listchars=eol:↵,tab:⇥\ ,trail:⏘,extends:⇢,precedes:⇠,conceal:\ ,nbsp:⏙
 "set showbreak=↪ " For consistency with list mode but useless due to numberline
@@ -264,6 +288,9 @@ augroup END
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
+"====== improve netrw ======
+Plug 'tpope/vim-vinegar'
+
 "====== python completion with jedi ======
 set completeopt=menuone,longest
 "set completeopt=longest,menuone " Erebor had this instead
@@ -325,20 +352,6 @@ Plug 'rhysd/vim-operator-surround'
 map <silent>sa <Plug>(operator-surround-append)
 map <silent>sd <Plug>(operator-surround-delete)
 map <silent>sr <Plug>(operator-surround-replace)
-
-"====== quicker file/buffer navigation ======
-let g:ctrlp_extensions = ['mixed']
-let g:ctrlp_cmd = 'CtrlPMixed'
-Plug 'ctrlpvim/ctrlp.vim'
-highlight CursorLine cterm=NONE ctermbg=238
-
-"====== improved file explorer ======
-nmap <Leader>/ :NERDTreeToggle<cr>
-let g:NERDTreeIgnore=['\.py[co]$', '\~$']
-let g:NERDTreeQuitOnOpen=1
-let g:NERDTreeDirArrowExpandable = '▸'
-let g:NERDTreeDirArrowCollapsible = '▾'
-Plug 'scrooloose/nerdtree'
 
 "====== simplify unicode character input and info query ======
 Plug 'chrisbra/unicode.vim'
