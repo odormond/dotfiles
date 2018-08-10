@@ -27,6 +27,26 @@ set shiftwidth=4
 set nojoinspaces
 set nostartofline
 set autoindent
+function! InjectGitBranch(type, ...)
+  let sel_save = &selection
+  let &selection = "inclusive"
+  let reg_save = @@
+
+  let branch = b:buffer_vcs_config['git']['branch']
+  echomsg "arg: " . a:0 . " type: " . a:type
+  if a:0  " Invoked from visual mode
+    silent exe "normal! gvc" . branch
+  elseif a:type == 'line'
+    silent exe "normal! '[V']c" . branch
+  else
+    silent exe "normal! `[v`]c" . branch
+  endif
+
+  let &selection = sel_save
+  let @@ = reg_save
+endfunction
+nmap <Leader>b :set opfunc=InjectGitBranch<CR>g@
+xmap <Leader>b :<C-U>call InjectGitBranch(visualmode(), 1)<CR>
 
 " Visuals
 set visualbell
