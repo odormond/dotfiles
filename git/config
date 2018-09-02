@@ -1,4 +1,6 @@
 # This is Git's per-user configuration file.
+[core]
+	excludesfile = /Users/odie/.gitignore
 [user]
     name = Olivier Dormond
 [merge]

@@ -11,6 +11,7 @@ SYMLINKS = {
     '.profile': 'bash/profile',
     '.inputrc': 'readline/rc',
     '.gitconfig': 'git/config',
+    '.gitignore': 'git/ignore',
     '.pythonrc.py': 'python/rc.py',
     '.tmux.conf': 'tmux/tmux.conf',
     '.vim': 'vim',
