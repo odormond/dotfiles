@@ -53,7 +53,12 @@ def startup():
     #
     #  Module auto-loader
     #
-    import imp
+    try:
+        import importlib.machinery
+        ALL_SUFFIXES = importlib.machinery.all_suffixes()
+    except ImportError:
+        import imp
+        ALL_SUFFIXES = [suffix for suffix, mode, typ in imp.get_suffixes()]
     import os
     import __main__
     if sys.version_info < (3, 0):
@@ -117,7 +122,6 @@ def startup():
                 delattr(loadmodule(self), attr)
 
     modules = list(sys.builtin_module_names)
-    suff = [ext for ext, mod, typ in imp.get_suffixes()]
     for path in sys.path:
         if path:  # path.startswith(sys.prefix):
             try:
@@ -125,7 +129,7 @@ def startup():
             except OSError:
                 continue
             for fn in dirlist:
-                for suf in suff:
+                for suf in ALL_SUFFIXES:
                     if fn.endswith(suf):
                         modules.append(fn[:-len(suf)])
                         break
