@@ -232,78 +232,7 @@ augroup vimrc
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
-
-"" For all text files
-"autocmd FileType text setlocal textwidth=78
-"autocmd FileType text setlocal formatoptions=tcqlna1r
-"autocmd FileType text let b:SuperTabDisabled = 1
-"autocmd BufRead,BufNewFile *.todo setf todo
-"autocmd BufRead,BufNewFile *.rest setf rest
-""autocmd BufRead,BufNewFile *      setf txt
-"
-"" For mails
-"autocmd FileType mail setlocal textwidth=72
-"autocmd FileType mail setlocal formatoptions=tcqln21r
-"autocmd FileType mail let b:SuperTabDisabled = 1
-"let g:mail_erase_quoted_sig = 1
-"let g:mail_delete_empty_quoted = 1
-""let g:mail_cursor_start = 1
-"
-"" For vim script
-"autocmd FileType vim setlocal formatoptions-=t
-"
-"au User VCSBufferCreated silent! nmap <unique> <buffer> q :bwipeout<cr>
-""  au User VCSPluginFinish set statusline=%<%f\ %y\ %{VCSCommandGetStatusLine()}\ %h%m%r%=%l,%c%V\ %P
-""let VCSCommandEnableBufferSetup=1
-"
-"" MUA
-"let g:MUA_me="olivier@mnc.ch,olivier.dormond@mnc.ch"
-"
-"" For python script
-"function! PyRun ()
-"  if filereadable("/tmp/vimpy.sock") && filewritable("/tmp/vimpy.sock")
-"    python import socket, vim; socket.socket(socket.AF_UNIX, socket.SOCK_DGRAM).sendto(vim.current.buffer.name, '/tmp/vimpy.sock')
-"  else
-"    ! python %
-"  endif
-"endfunction
-"autocmd FileType python command! Run call PyRun()
-""autocmd FileType python setlocal statusline=%<%f\ (%{&fileencoding})\ %y\ %{PythonScopesStatus()}\ %h%m%r%=%l,%c%V\ %P
-"autocmd BufNewFile,BufRead *.py compiler python
-"let python_space_error_highlight=1
-"nmap <Leader>sp i#! /usr/bin/env python<cr># coding: UTF-8<cr><cr>from __future__ import division<cr>from __future__ import absolute_import<cr>from __future__ import print_function<cr>from __future__ import unicode_literals<cr><cr>
-"
 augroup END
-
-" Type saving abbreviations
-"iab #!p #!/usr/bin/env python<cr># coding:UTF-8<cr>  " with jedi, vim goes wild
-
-" Automatic sessions
-"function! MakeSession()
-"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-"  if (filewritable(b:sessiondir) != 2)
-"    exe 'silent !mkdir -p ' b:sessiondir
-"    redraw!
-"  endif
-"  let b:filename = b:sessiondir . '/session.vim'
-"  exe "mksession! " . b:filename
-"endfunction
-"
-"function! LoadSession()
-"  let b:sessiondir = $HOME . "/.vim/sessions" . getcwd()
-"  let b:sessionfile = b:sessiondir . "/session.vim"
-"  if (filereadable(b:sessionfile))
-"    exe 'source ' b:sessionfile
-"  else
-"    echo "No session loaded."
-"  endif
-"endfunction
-"
-" Adding automatons for when entering or leaving Vim
-"if (argc() == 0)
-"	au VimEnter * nested :call LoadSession()
-"	au VimLeave * :call MakeSession()
-"endif
 
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
