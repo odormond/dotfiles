@@ -234,6 +234,15 @@ augroup vimrc
     \ endif
 augroup END
 
+" personal quick help
+function! PersonalHelp()
+  let filename=findfile("personal.hlp", &runtimepath)
+  if filereadable(filename)
+    echo join(readfile(filename), "\n")
+  endif
+endfunction
+nmap <Leader>? :call PersonalHelp()<cr>
+
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
