@@ -1,6 +1,18 @@
-,?          Show this help
-,,          Toggle any markers on/off to ease copying
-,b<motion>  Replace <motion> with current git branch name
-,o          Toggle paste mode
-,t          Toggle tagbar
-,tt         Open tagbar and jump to it
+,?                  Show this help
+,,                  Toggle any markers on/off to ease copying
+,o                  Toggle paste mode
+
+Git
+,b<motion>          Replace <motion> with current git branch name
+
+Jedi
+,d                  Go to Definition
+,g                  Go to Assignment
+,n                  Show usages of name
+,r                  Rename variables
+K                   Show pydoc documentation
+:Pyimport <name>    Open the file that would be used when doing "import <name>"
+
+TagBar
+,t                  Toggle tagbar
+,tt                 Open tagbar and jump to it
