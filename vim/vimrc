@@ -251,18 +251,19 @@ Plug 'tpope/vim-vinegar'
 
 "====== python completion with jedi ======
 set completeopt=menuone,longest
-"set completeopt=longest,menuone " Erebor had this instead
 let g:jedi#use_tabs_not_buffers=0
 let g:jedi#use_splits_not_buffers="bottom"
-"let g:jedi#auto_vim_configuration = 0
-"let g:jedi#smart_auto_mappings = 0 " With this automatically insert the 'import' after typing 'from bla<space>'
-let g:jedi#show_call_signatures=0  " Present bug 687 makes any other setting a major pain (was 1 on Erebor)
-"autocmd FileType python setlocal omnifunc=jedi#completions
+let g:jedi#auto_vim_configuration=0  " Don't mess with my vim config
+let g:jedi#smart_auto_mappings=0 " With this automatically insert the 'import' after typing 'from bla<space>'
+let g:jedi#show_call_signatures=1
 Plug 'davidhalter/jedi-vim'
 
 "====== use the tab key for completion ======
 let g:SuperTabDefaultCompletionType = 'context'
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
 let g:SuperTabLongestEnhanced=1
+let g:SuperTabLongestHighlight=1
+let g:SuperTabCrMapping=1
 Plug 'ervandew/supertab'
 
 "====== code structure identification and navigation ======
