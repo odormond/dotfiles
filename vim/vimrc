@@ -243,6 +243,25 @@ function! PersonalHelp()
 endfunction
 nmap <Leader>? :call PersonalHelp()<cr>
 
+" Toggle showmarks and number to allow copying text
+let s:colorcolumn = &colorcolumn
+function! ColorColumnToggle()
+  if &colorcolumn == ""
+    exe "set colorcolumn=" . s:colorcolumn
+  else
+    set colorcolumn=
+  endif
+endfunction
+function! ToggleFancies()
+  silent SyntasticToggleMode
+  GitGutterSignsToggle
+  IndentLinesToggle
+  call ColorColumnToggle()
+  set number!
+  set relativenumber!
+endfunction
+nmap <Leader>, :call ToggleFancies()<cr>
+
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
@@ -321,15 +340,13 @@ let g:syntastic_error_symbol='✗'
 let g:syntastic_warning_symbol='⚠'
 let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ["flake8"]
-"let g:syntastic_cursor_column = 0
+"let g:syntastic_cursor_columns = 0
 Plug 'vim-syntastic/syntastic'
 
 "====== square brackets shortcuts for paired commands ======
 Plug 'tpope/vim-unimpaired'
 
 "====== show indentation level with thin marker for space based indentation ======
-" Toggle showmarks and number to allow copying text
-nmap <Leader>, :SyntasticToggleMode<cr>:GitGutterSignsToggle<cr>:IndentLinesToggle<cr>:set number!<cr>:set relativenumber!<cr>
 let g:indentLine_char='┊' " or: ╵╷│┆|¦
 let g:indentLine_color_term=235
 Plug 'Yggdroot/indentLine'
