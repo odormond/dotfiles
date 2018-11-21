@@ -14,6 +14,9 @@ Jedi
 K                   Show pydoc documentation
 :Pyimport <name>    Open the file that would be used when doing "import <name>"
 
+Magit
+,M                  Show Magit in a new vertical split
+
 TagBar
 ,t                  Toggle tagbar
 ,tt                 Open tagbar and jump to it
