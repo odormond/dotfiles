@@ -1,6 +1,7 @@
 ,?                  Show this help
 ,,                  Toggle any markers on/off to ease copying
 ,o                  Toggle paste mode
+,z                  Toggle fullscreen zoom of current window
 
 Git
 ,b<motion>          Replace <motion> with current git branch name

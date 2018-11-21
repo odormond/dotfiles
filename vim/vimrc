@@ -290,6 +290,10 @@ nnoremap <Leader>t :TagbarToggle<cr>
 nnoremap <Leader>tt :TagbarOpen fj<cr>
 Plug 'majutsushi/tagbar'
 
+"====== Window zooming ======
+nmap <Leader>z <Plug>(zoom-toggle)
+Plug 'dhruvasagar/vim-zoom'
+
 "====== Fancy status line with airline =====
 set laststatus=2
 let g:airline_theme="odie"
