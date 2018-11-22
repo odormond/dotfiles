@@ -43,6 +43,7 @@ hi ColorColumn gui=NONE guibg=#1c1c1c ctermbg=234 guifg=NONE ctermfg=NONE
 "hi FoldColumn    gui=NONE  guifg=NONE  guibg=NONE
 "hi IncSearch     gui=NONE  guifg=NONE  guibg=NONE
 hi LineNr        gui=NONE cterm=NONE guifg=#6c6c6c ctermfg=242 guibg=NONE ctermbg=NONE
+hi MatchParen    gui=NONE cterm=bold guifg=#000000 ctermfg=0 guibg=#8a8a8a ctermbg=245
 "hi ModeMsg       gui=NONE  guifg=NONE  guibg=NONE
 "hi MoreMsg       gui=NONE  guifg=NONE  guibg=NONE
 "hi NonText       gui=NONE  guifg=NONE  guibg=NONE
@@ -89,5 +90,5 @@ hi ShowMarksHLm gui=NONE cterm=NONE ctermbg=242 ctermfg=15
 " 256 color terms use the following base componant values:
 " 00, 5f, 87, af, d7, ff
 " For the grayscale ramp:
-" 08, 12, 1c, 26, 44, 4e, 58, 62, 80, 8a, 94, 9e, bc, c6, d0, da
+" 08, 12, 1c, 26, 30, 3a, 44, 4e, 58, 62, 6c, 76, 80, 8a, 94, 9e, a8, b2, bc, c6, d0, da, e4, ee
 
