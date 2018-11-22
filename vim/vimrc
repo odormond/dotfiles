@@ -241,7 +241,7 @@ function! PersonalHelp()
     echo join(readfile(filename), "\n")
   endif
 endfunction
-nmap <Leader>? :call PersonalHelp()<cr>
+nmap <expr> <Leader>? PersonalHelp()
 
 " Toggle showmarks and number to allow copying text
 let s:colorcolumn = &colorcolumn
@@ -260,7 +260,7 @@ function! ToggleFancies()
   set number!
   set relativenumber!
 endfunction
-nmap <Leader>, :call ToggleFancies()<cr>
+nmap <expr> <Leader>, ToggleFancies()
 
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
