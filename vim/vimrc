@@ -293,26 +293,29 @@ Plug 'ervandew/supertab'
 "====== code structure identification and navigation ======
 nnoremap <Leader>t :TagbarToggle<cr>
 nnoremap <Leader>tt :TagbarOpen fj<cr>
+let g:tagbar_left=1
 Plug 'majutsushi/tagbar'
 
 "====== Window zooming ======
 nmap <Leader>z <Plug>(zoom-toggle)
 Plug 'dhruvasagar/vim-zoom'
 
+"====== Window swaping ======
+Plug 'wesQ3/vim-windowswap'
+
 "====== Fancy status line with airline =====
 set laststatus=2
 let g:airline_theme="odie"
 let g:airline_powerline_fonts=1
-let g:airline_inactive_collapse=0
-let g:airline#extensions#hunks#enabled=1
-let g:airline#extensions#tagbar#enabled=1
-let g:airline#extensions#tagbar#flags='f'
-let g:airline#extensions#branch#enabled=1
 let g:airline#extensions#branch#use_vcscommand=0
+let g:airline#extensions#hunks#non_zero_only=1
+let g:airline#extensions#tagbar#flags='f'
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 function! s:setup_airline()
   let g:airline_section_c=airline#section#create_left(['file', 'readonly', 'tagbar'])
   let g:airline_section_x=airline#section#create(['filetype'])
-  let g:airline_section_z=airline#section#create([' %{winnr()}β%{bufnr("%")} ', 'windowswap', '%3p%% ', 'linenr', ':%3v '])
+  let g:airline_section_y=airline#section#create(['ffenc', 'windowswap'])
+  let g:airline_section_z=airline#section#create(['%3p%% ', 'linenr', ':%3v '])
 endfunction
 autocmd User AirlineAfterInit call s:setup_airline()
 Plug 'vim-airline/vim-airline'
