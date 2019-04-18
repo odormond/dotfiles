@@ -168,8 +168,8 @@ nnoremap <C-w>8 8<C-w><C-w>
 nnoremap <C-w>9 9<C-w><C-w>
 
 " Window spliting
-nnoremap <C-w>" :vsplit<cr>
-nnoremap <C-w>= :split<cr>
+nnoremap <Leader>= :vsplit<cr>
+nnoremap <Leader>" :split<cr>
 
 " regular shape for visual block
 set virtualedit=block
@@ -371,7 +371,7 @@ nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-nnoremap <silent> <C-w><C-w> :TmuxNavigatePrevious<cr>
+"nnoremap <silent> <C-w><C-w> :TmuxNavigatePrevious<cr>
 
 " Add plugins to &runtimepath
 call plug#end()
