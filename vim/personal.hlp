@@ -1,7 +1,7 @@
 ,?                  Show this help
 ,,                  Toggle any markers on/off to ease copying
 ,o                  Toggle paste mode
-,h                  Turn off search result highlighting
+,-                  Turn off search result highlighting
 ,ww                 Mark source/destination windows to swap positions
 ,=                  Split window horizontally
 ,"                  Split window vertically

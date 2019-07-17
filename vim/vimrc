@@ -78,7 +78,7 @@ set showcmd
 "" search improvements
 set incsearch
 set hlsearch  " hide highlighting with :nohls instead of unsetting it
-nnoremap <Leader>h :nohls<cr>
+nnoremap <Leader>- :nohls<cr>
 "nnoremap <silent> n n:call HLNext(0.01, 2)<cr>
 "nnoremap <silent> N N:call HLNext(0.01, 2)<cr>
 "function! HLNext (blinktime, count)
