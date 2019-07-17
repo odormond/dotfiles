@@ -27,5 +27,7 @@ alias gf='git fetch'
 alias gg='git graph'
 alias gl='git log -p'
 alias gs='git status'
+alias grm='git rebase origin/master master'
+alias grb='git rebase master `git rev-parse --abbrev-ref HEAD`'
 
 # vim:ft=sh
