@@ -43,7 +43,7 @@ hi ColorColumn gui=NONE guibg=#1c1c1c ctermbg=234 guifg=NONE ctermfg=NONE
 "hi FoldColumn    gui=NONE  guifg=NONE  guibg=NONE
 "hi IncSearch     gui=NONE  guifg=NONE  guibg=NONE
 hi LineNr        gui=NONE cterm=NONE guifg=#6c6c6c ctermfg=242 guibg=NONE ctermbg=NONE
-hi MatchParen    gui=NONE cterm=bold guifg=#000000 ctermfg=0 guibg=#8a8a8a ctermbg=245
+hi MatchParen    gui=NONE cterm=bold guifg=#ffffff ctermfg=15 guibg=#4e4e4e ctermbg=239
 "hi ModeMsg       gui=NONE  guifg=NONE  guibg=NONE
 "hi MoreMsg       gui=NONE  guifg=NONE  guibg=NONE
 "hi NonText       gui=NONE  guifg=NONE  guibg=NONE
