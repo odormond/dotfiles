@@ -134,7 +134,7 @@ set shortmess=afilmnrxoOtT
 set backspace=indent,eol,start
 set spelllang=en_gb,fr
 set shiftround
-set timeoutlen=300
+set timeoutlen=500
 set ttimeoutlen=50
 
 " Line wrapping display tunning
