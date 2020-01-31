@@ -112,8 +112,6 @@ set path+=**
 "set autochdir
 " edit file under the cursor in a vertical split
 nnoremap gf :vertical wincmd f<CR>
-" list buffer and prompt
-nnoremap § :ls<CR>:b 
 " switch to alternate buffer in same window
 nnoremap <BS> <C-^>
 " netrw tunning
@@ -373,6 +371,11 @@ nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 "nnoremap <silent> <C-w><C-w> :TmuxNavigatePrevious<cr>
+
+"====== fuzzy file/buffer switching ======
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
+Plug 'ctrlpvim/ctrlp.vim'
+nnoremap <silent> § :CtrlPBuffer<cr>
 
 " Add plugins to &runtimepath
 call plug#end()
