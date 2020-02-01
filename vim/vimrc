@@ -114,14 +114,6 @@ set path+=**
 nnoremap gf :vertical wincmd f<CR>
 " switch to alternate buffer in same window
 nnoremap <BS> <C-^>
-" netrw tunning
-let g:netrw_banner=0
-let g:netrw_liststyle=3
-let g:netrw_preview=1
-let g:netrw_browse_split=4
-let g:netrw_altv=1
-let g:netrw_alto=0
-let g:netrw_winsize=85
 
 "set list
 set listchars=eol:↵,tab:⇥\ ,trail:⏘,extends:⇢,precedes:⇠,conceal:\ ,nbsp:⏙
@@ -271,8 +263,12 @@ endif
 " Specify a directory for plugins
 call plug#begin('~/.vim/plugged')
 
-"====== improve netrw ======
-Plug 'tpope/vim-vinegar'
+"====== use NERDtree instead of netrw ======
+let g:loaded_netrw=1
+let g:loaded_netrwPlugin=1
+nnoremap <Leader>no :NERDTreeVCS %:h<cr>
+nnoremap <Leader>nc :NERDTreeClose<cr>
+Plug 'preservim/nerdtree'
 
 "====== python completion with jedi ======
 set completeopt=menuone,longest
@@ -281,6 +277,7 @@ let g:jedi#use_splits_not_buffers="bottom"
 let g:jedi#auto_vim_configuration=0  " Don't mess with my vim config
 let g:jedi#smart_auto_mappings=0 " With this automatically insert the 'import' after typing 'from bla<space>'
 let g:jedi#show_call_signatures=1
+let g:jedi#usages_command="<Leader>u"
 Plug 'davidhalter/jedi-vim'
 
 "====== use the tab key for completion ======
@@ -292,9 +289,14 @@ let g:SuperTabCrMapping=1
 Plug 'ervandew/supertab'
 
 "====== code structure identification and navigation ======
-nnoremap <Leader>t :TagbarToggle<cr>
-nnoremap <Leader>tt :TagbarOpen fj<cr>
+nnoremap <Leader>to :TagbarOpen fj<cr>
+nnoremap <Leader>tc :TagbarClose<cr>
+au BufEnter __Tagbar__.* nnoremap <buffer> <esc> :wincmd p<cr>
 let g:tagbar_left=1
+let g:tagbar_zoomwidth=0
+let g:tagbar_indent=1
+let g:tagbar_show_visibility=0
+let g:tagbar_previewwin_pos="belowright"
 Plug 'majutsushi/tagbar'
 
 "====== Window zooming ======
@@ -316,7 +318,7 @@ function! s:setup_airline()
   let g:airline_section_c=airline#section#create_left(['file', 'readonly', 'tagbar'])
   let g:airline_section_x=airline#section#create(['filetype'])
   let g:airline_section_y=airline#section#create(['ffenc', 'windowswap'])
-  let g:airline_section_z=airline#section#create(['%3p%% ', 'linenr', ':%3v '])
+  let g:airline_section_z=airline#section#create(['%3p%% ', 'linenr', ':%3v [%{winnr()}]'])
 endfunction
 autocmd User AirlineAfterInit call s:setup_airline()
 Plug 'vim-airline/vim-airline'

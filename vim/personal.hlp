@@ -15,7 +15,7 @@ Git
 Jedi
 ,d                  Go to Definition
 ,g                  Go to Assignment
-,n                  Show usages of name
+,u                  Show usages of name
 ,r                  Rename variables
 K                   Show pydoc documentation
 :Pyimport <name>    Open the file that would be used when doing "import <name>"
@@ -23,6 +23,10 @@ K                   Show pydoc documentation
 Magit
 ,M                  Show Magit in a new vertical split
 
+NERDTree
+,no                 Open NERDTree at VCS root of current file and jump to it
+,nc                 Close NERDTree
+
 TagBar
-,t                  Toggle tagbar
-,tt                 Open tagbar and jump to it
+,to                 Open tagbar and jump to it
+,tc                 Close tagbar
