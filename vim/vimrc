@@ -323,8 +323,23 @@ endfunction
 autocmd User AirlineAfterInit call s:setup_airline()
 Plug 'vim-airline/vim-airline'
 
+"====== make . support some more plugin mapping ======
+Plug 'tpope/vim-repeat'
+
+"====== square brackets shortcuts for paired commands ======
+Plug 'tpope/vim-unimpaired'
+
 "====== hunk managment with fugitive ======
 Plug 'tpope/vim-fugitive'
+
+"====== (un)comment stuff out ======
+Plug 'tpope/vim-commentary'
+
+"====== direct interaction with tmux, particularly buffers ======
+Plug 'tpope/vim-tbone'
+
+"====== increment/decrement date, time, ... and not just numbers ======
+Plug 'tpope/vim-speeddating'
 
 "====== extend fugitive with a nice TUI to manage branches ======
 Plug 'idanarye/vim-merginal'
@@ -357,9 +372,6 @@ let g:syntastic_check_on_wq = 0
 let g:syntastic_python_checkers = ["flake8", "black"]
 "let g:syntastic_cursor_columns = 0
 Plug 'vim-syntastic/syntastic'
-
-"====== square brackets shortcuts for paired commands ======
-Plug 'tpope/vim-unimpaired'
 
 "====== show indentation level with thin marker for space based indentation ======
 let g:indentLine_char='┊' " or: ╵╷│┆|¦
