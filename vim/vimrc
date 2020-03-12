@@ -331,6 +331,35 @@ Plug 'tpope/vim-unimpaired'
 
 "====== hunk managment with fugitive ======
 Plug 'tpope/vim-fugitive'
+function s:git_graph()
+  let buf_nr = bufadd("git graph")
+  let win_nr = bufwinnr(buf_nr)
+  if win_nr == -1
+    exe buf_nr . 'buffer'
+  else
+    exe win_nr . 'wincmd w'
+  endif
+  setlocal buftype=nofile bufhidden=hide nobuflisted noswapfile nomodified modifiable
+  silent exe '%delete'
+  silent read !git graph
+  normal ggdd
+  setlocal nomodifiable filetype=git
+  syntax match gitGraphTree /^[*|\/\\ ]\+/ nextgroup=gitGraphHash
+  syntax match gitGraphHash /\<\x\{4,\}\>/ nextgroup=gitGraphDecoration
+  syntax match gitGraphDecoration /\(\<\x\{4,\}\> \)\@<=(.\{-})/ms=s+1,me=e-1
+  syntax match gitGraphLocalBranch /[-0-9a-zA-Z_/]\+/ contained containedin=gitGraphDecoration
+  syntax match gitGraphRemoteBranch /origin\/[-0-9a-zA-Z_/]\+/ contained containedin=gitGraphDecoration
+  syntax match gitGraphHEAD /HEAD -> / contained containedin=gitGraphDecoration
+  syntax match gitGraphTag /tag: [^)]\+/ contained containedin=gitGraphDecoration
+  highlight gitGraphTree ctermfg=Blue
+  highlight gitGraphHash ctermfg=Brown
+  highlight gitGraphHEAD ctermfg=Cyan
+  highlight gitGraphLocalBranch ctermfg=Green
+  highlight gitGraphRemoteBranch ctermfg=Red
+  highlight gitGraphTag ctermfg=Yellow
+endfunction
+command Gg call s:git_graph()
+"syn match gitGraphLine /[*|]/
 
 "====== (un)comment stuff out ======
 Plug 'tpope/vim-commentary'
