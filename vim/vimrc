@@ -273,7 +273,7 @@ Plug 'preservim/nerdtree'
 "====== python completion with jedi ======
 set completeopt=menuone,longest
 let g:jedi#use_tabs_not_buffers=0
-let g:jedi#use_splits_not_buffers="bottom"
+let g:jedi#use_splits_not_buffers="winwidth"
 let g:jedi#auto_vim_configuration=0  " Don't mess with my vim config
 let g:jedi#smart_auto_mappings=0 " With this automatically insert the 'import' after typing 'from bla<space>'
 let g:jedi#show_call_signatures=1
@@ -382,13 +382,6 @@ Plug 'airblade/vim-gitgutter'
 "====== advanced text object for blocks delimited by (), {}, [], '', "", <>
 Plug 'kana/vim-textobj-user'  " dependency of vim-textobj-anyblock
 Plug 'rhysd/vim-textobj-anyblock'
-
-"====== surround operation ======
-Plug 'kana/vim-operator-user'  " dependency of vim-operator-surround
-Plug 'rhysd/vim-operator-surround'
-map <silent>sa <Plug>(operator-surround-append)
-map <silent>sd <Plug>(operator-surround-delete)
-map <silent>sr <Plug>(operator-surround-replace)
 
 "====== simplify unicode character input and info query ======
 Plug 'chrisbra/unicode.vim'
