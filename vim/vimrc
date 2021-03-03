@@ -370,9 +370,6 @@ Plug 'tpope/vim-speeddating'
 "====== extend fugitive with a nice TUI to manage branches ======
 Plug 'idanarye/vim-merginal'
 
-"====== git staging management ======
-Plug 'jreybert/vimagit'
-
 "====== change marker with gitgutter ======
 Plug 'airblade/vim-gitgutter'
 
