@@ -128,7 +128,29 @@ set ttyfast " should always be true nowadays
 "set lazyredraw
 set ruler
 set splitbelow splitright
-set shortmess=afilmnrxoOtT
+set shortmess=filmnrwxoOtTc
+"flag	meaning when present
+"  f	use "(3 of 5)" instead of "(file 3 of 5)"
+"  i	use "[noeol]" instead of "[Incomplete last line]"
+"  l	use "999L, 888B" instead of "999 lines, 888 bytes"
+"  m	use "[+]" instead of "[Modified]"
+"  n	use "[New]" instead of "[New File]"
+"  r	use "[RO]" instead of "[readonly]"
+"  w	use "[w]" instead of "written" for file write message
+"	    and "[a]" instead of "appended" for ':w >> file' command
+"  x	use "[dos]" instead of "[dos format]", "[unix]" instead of
+"	    "[unix format]" and "[mac]" instead of "[mac format]".
+"  o	overwrite message for writing a file with subsequent message
+"	    for reading a file (useful for ":wn" or when 'autowrite' on)
+"  O	message for reading a file overwrites any previous message.
+"	    Also for quickfix message (e.g., ":cn").
+"  t	truncate file message at the start if it is too long to fit
+"	    on the command-line, "<" will appear in the left most column.
+"  T	truncate other messages in the middle if they are too long to
+"	    fit on the command line.  "..." will appear in the middle.
+"  c	don't give |ins-completion-menu| messages.  For example,
+"	    "-- XXX completion (YYY)", "match 1 of 2", "The only match",
+"	    "Pattern not found", "Back at original", etc.
 set backspace=indent,eol,start
 set spelllang=en_gb,fr
 set shiftround
