@@ -419,12 +419,6 @@ let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
 Plug 'ctrlpvim/ctrlp.vim'
 nnoremap <silent> § :CtrlPBuffer<cr>
 
-"===== golang helpers =====
-let g:go_highlight_trailing_whitespace_error = 1
-let g:go_auto_type_info = 1
-let g:go_doc_popup_window = 1
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-au FileType go inoremap <silent> <buffer> . .<C-X><C-O>
 "===== coc.nvim =====
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Suggested settings
