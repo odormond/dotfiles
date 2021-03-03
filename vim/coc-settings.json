@@ -1,0 +1,14 @@
+{
+  "diagnostic-languageserver.filetypes": {
+    "python": "flake8"
+  },
+  "diagnostic-languageserver.formatFiletypes": {
+    "python": ["black", "isort"] 
+  },
+  "diagnostic-languageserver.formatters": {
+    "black": {
+      "command": "black",
+      "args": ["-q", "-l", "100", "-S", "-"]
+    }
+  }
+}
