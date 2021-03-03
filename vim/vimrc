@@ -372,6 +372,13 @@ Plug 'idanarye/vim-merginal'
 
 "====== change marker with gitgutter ======
 Plug 'airblade/vim-gitgutter'
+highlight SignColumn ctermbg=NONE guibg=NONE
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+omap ih <Plug>(GitGutterTextObjectInnerPending)
+omap ah <Plug>(GitGutterTextObjectOuterPending)
+xmap ih <Plug>(GitGutterTextObjectInnerVisual)
+xmap ah <Plug>(GitGutterTextObjectOuterVisual)
 
 "====== advanced text object for blocks delimited by (), {}, [], '', "", <>
 Plug 'kana/vim-textobj-user'  " dependency of vim-textobj-anyblock
