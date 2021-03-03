@@ -358,6 +358,9 @@ endfunction
 command Gg call s:git_graph()
 "syn match gitGraphLine /[*|]/
 
+"====== git branch viewer for fugitive ======
+Plug 'rbong/vim-flog'
+
 "====== (un)comment stuff out ======
 Plug 'tpope/vim-commentary'
 
