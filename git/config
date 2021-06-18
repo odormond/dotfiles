@@ -1,6 +1,6 @@
 # This is Git's per-user configuration file.
 [core]
-	excludesfile = /Users/odie/.gitignore
+    excludesfile = /Users/odie/.gitignore
 [user]
     name = Olivier Dormond
 [merge]
@@ -8,6 +8,7 @@
 [alias]
     graph = log --graph --oneline --decorate --branches --remotes --tags HEAD
     changelog = "!f(){ echo \"## Changelog from $1 to $2\" && git log $1...$2 --pretty=format:\" * %s [view commit]($(git config --get remote.origin.url | sed -e's+:+/+' -e's+git@+http://+' -e's+.git+/commits/%H+'))\" | grep -v ^Merged; };f"
+    restack = "!f(){ git checkout ${2:-HEAD} && branches=$(git rev-list ${1:-master}..HEAD^ | git name-rev --stdin --name-only | cat -n | awk '$0 !~ /~/ {print \"git branch -f \" $2 \" HEAD~\" $1}') && git rebase ${1:-master} && eval \"$branches\"; };f"
 [push]
     default = simple
     default = current
