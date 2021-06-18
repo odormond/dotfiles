@@ -2,6 +2,7 @@
 
 import pickle
 import os
+import sys
 import time
 
 import psutil
@@ -52,4 +53,9 @@ def load():
     return '{:.2f} {:.2f} {:.2f}'.format(*os.getloadavg())
 
 
-print("#[fg=colour240,bg=colour234]#[fg=colour16,bg=colour240]{}#[fg=colour244,bg=colour240]#[fg=colour16,bg=colour244]{}#[fg=colour254,bg=colour244]#[fg=colour16,bg=colour254]{}".format(net_load(), load(), time.strftime('%Y-%m-%d %H:%M:%S')))
+if len(sys.argv) != 1:
+    bg = sys.argv[1]
+else:
+    bg = 'colour234'
+
+print(f"#[fg=colour240,bg={bg}]#[fg=colour16,bg=colour240]{net_load()}#[fg=colour244,bg=colour240]#[fg=colour16,bg=colour244]{load()}#[fg=colour254,bg=colour244]#[fg=colour16,bg=colour254]{time.strftime('%Y-%m-%d %H:%M:%S')}")
