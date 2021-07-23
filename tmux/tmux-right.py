@@ -2,13 +2,15 @@
 
 import pickle
 import os
+import re
 import sys
 import time
 
 import psutil
 
 
-state_filename = '/tmp/.tmux-right-netload'
+IFACE_RE = re.compile(r'^(en|eth|wl)')
+STATE_FILENAME = '/tmp/.tmux-right-netload'
 
 
 def humanize(v):
@@ -33,19 +35,24 @@ def humanize(v):
 
 def net_load():
     t1 = time.time()
-    net_io = psutil.net_io_counters()
-    recv, sent = net_io.bytes_recv, net_io.bytes_sent
+    net_ios = psutil.net_io_counters(pernic=True)
+    recv = sent = 0
+    for iface, net_io in net_ios.items():
+        if IFACE_RE.search(iface) is None:
+            continue
+        recv += net_io.bytes_recv
+        sent += net_io.bytes_sent
     try:
-        prev_recv, prev_sent, t0 = pickle.load(open(state_filename, 'rb'))
-    except (OSError, pickle.UnpicklingError):
-        throughput = ''
+        prev_recv, prev_sent, t0 = pickle.load(open(STATE_FILENAME, 'rb'))
+    except Exception as e:
+        throughput = str(e) 
     else:
         delta_recv = recv - prev_recv
         delta_sent = sent - prev_sent
         delta_t = t1 - t0
         throughput = "▽" + humanize(delta_recv/delta_t) + " △" + humanize(delta_sent/delta_t)
 
-    pickle.dump((recv, sent, t1), open(state_filename, 'wb'))
+    pickle.dump((recv, sent, t1), open(STATE_FILENAME, 'wb'))
     return throughput
 
 
