@@ -274,7 +274,6 @@ function! ColorColumnToggle()
   endif
 endfunction
 function! ToggleFancies()
-  silent SyntasticToggleMode
   GitGutterSignsToggle
   IndentLinesToggle
   call ColorColumnToggle()
@@ -411,15 +410,6 @@ Plug 'rhysd/vim-textobj-anyblock'
 
 "====== simplify unicode character input and info query ======
 Plug 'chrisbra/unicode.vim'
-
-"====== syntax checking with syntastic ======
-let g:syntastic_check_on_open=1
-let g:syntastic_error_symbol='✗'
-let g:syntastic_warning_symbol='⚠'
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ["flake8", "black"]
-"let g:syntastic_cursor_columns = 0
-"Plug 'vim-syntastic/syntastic'
 
 "====== show indentation level with thin marker for space based indentation ======
 let g:indentLine_char='┊' " or: ╵╷│┆|¦
