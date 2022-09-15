@@ -42,7 +42,7 @@ hi ColorColumn gui=NONE guibg=#1c1c1c ctermbg=234 guifg=NONE ctermfg=NONE
 "hi VertSplit     gui=NONE  guifg=NONE  guibg=NONE
 "hi FoldColumn    gui=NONE  guifg=NONE  guibg=NONE
 "hi IncSearch     gui=NONE  guifg=NONE  guibg=NONE
-hi LineNr        gui=NONE cterm=NONE guifg=#6c6c6c ctermfg=242 guibg=NONE ctermbg=NONE
+hi LineNr        gui=NONE cterm=NONE guifg=#6c6c6c ctermfg=242 guibg=#121212 ctermbg=233
 hi MatchParen    gui=NONE cterm=bold guifg=#ffffff ctermfg=15 guibg=#4e4e4e ctermbg=239
 "hi ModeMsg       gui=NONE  guifg=NONE  guibg=NONE
 "hi MoreMsg       gui=NONE  guifg=NONE  guibg=NONE
