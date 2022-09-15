@@ -1,4 +1,7 @@
 {
+  "suggest": {
+    "noselect": true
+  },
   "diagnostic-languageserver.filetypes": {
     "python": "flake8"
   },
