@@ -73,7 +73,8 @@ unset color_prompt force_color_prompt
 
 # Preserve virtual env tag in PS1
 if [ -n "$VIRTUAL_ENV" ]; then
-    PS1="($(basename "$VIRTUAL_ENV"))$PS1"
+    PATH=${PATH/$VIRTUAL_ENV\/bin:/}
+    . $VIRTUAL_ENV/bin/activate
 fi
 
 # If this is an xterm set the title to user@host:dir
