@@ -165,7 +165,8 @@ set breakindentopt=min:20,shift:8
 
 set synmaxcol=256 " Don't look to far away for syntax highlighting. Will speed things up.
 set colorcolumn=100,200
-colorscheme odie
+colorscheme odie " Disable for light background
+" set bg=light
 
 
 " Diff
@@ -413,7 +414,12 @@ Plug 'chrisbra/unicode.vim'
 
 "====== show indentation level with thin marker for space based indentation ======
 let g:indentLine_char='┊' " or: ╵╷│┆|¦
-let g:indentLine_color_term=235
+if get(hlget("Normal")[0], "ctermbg", 255) == 0
+  let g:indentLine_color_term=235  " For dark background
+else
+  let g:indentLine_color_term=254  " For light background
+endif
+
 Plug 'Yggdroot/indentLine'
 
 "====== vim tmux navigator, seamless navigation between vim splits and tmux panes ======
