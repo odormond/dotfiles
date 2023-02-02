@@ -254,6 +254,9 @@ augroup vimrc
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
+
+  " Detect hcl files and treat them as tf files
+  autocmd BufNewFile,BufRead *.hcl setfiletype tf
 augroup END
 
 " personal quick help
@@ -329,8 +332,10 @@ set laststatus=2
 let g:airline_theme="odie"
 let g:airline_powerline_fonts=1
 let g:airline#extensions#branch#use_vcscommand=0
+let g:airline#extensions#branch#displayed_head_limit=11
 let g:airline#extensions#coc#enabled=1
 let g:airline#extensions#hunks#non_zero_only=1
+let g:airline#extensions#searchcount#enabled=0
 let g:airline#extensions#tagbar#flags='f'
 let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
 function! s:setup_airline()
@@ -436,6 +441,15 @@ nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
 Plug 'ctrlpvim/ctrlp.vim'
 nnoremap <silent> § :CtrlPBuffer<cr>
+
+"===== Python coverage highlighting ======
+Plug 'mgedmin/coverage-highlight.vim'
+highlight NoCoverage ctermbg=234
+highlight NoBranchCoverage ctermbg=234
+highlight NoBranchCoverageTarget ctermbg=234
+nnoremap <leader>c :ToggleCoverage<CR>
+nnoremap [c :PrevUncovered<CR>
+nnoremap ]c :NextUncovered<CR>
 
 "===== coc.nvim =====
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
