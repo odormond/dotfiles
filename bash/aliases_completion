@@ -2,8 +2,8 @@
 function alias_completion {
     local namespace="alias_completion"
 
-    # parse function based completion definitions, where capture group 2 => function and 3 => trigger
-    local compl_regex='complete( +[^ ]+)* -F ([^ ]+) ("[^"]+"|[^ ]+)'
+    # parse command and function based completion definitions, where capture group 2 => command or function and 3 => trigger
+    local compl_regex='complete( +[^ ]+)* -[CF] ([^ ]+) ("[^"]+"|[^ ]+)'
     # parse alias definitions, where capture group 1 => trigger, 2 => command, 3 => command arguments
     local alias_regex="alias ([^=]+)='(\"[^\"]+\"|[^ ]+)(( +[^ ]+)*)'"
 
@@ -21,6 +21,9 @@ function alias_completion {
     local line; while read line; do
         eval "local alias_tokens; alias_tokens=($line)" 2>/dev/null || continue # some alias arg patterns cause an eval parse error
         local alias_name="${alias_tokens[0]}" alias_cmd="${alias_tokens[1]}" alias_args="${alias_tokens[2]# }"
+
+        # skip alias with explicit completion defined
+        complete -p "$alias_name" >&/dev/null && continue
 
         # skip aliases to pipes, boolean control structures and other command lists
         # (leveraging that eval errs out if $alias_args contains unquoted shell metacharacters)
