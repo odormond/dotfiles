@@ -451,6 +451,9 @@ nnoremap <leader>c :ToggleCoverage<CR>
 nnoremap [c :PrevUncovered<CR>
 nnoremap ]c :NextUncovered<CR>
 
+"====== sandwiched text operation =====
+Plug 'machakann/vim-sandwich'
+
 "===== coc.nvim =====
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Run the following command to install the extensions:
