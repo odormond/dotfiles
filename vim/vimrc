@@ -288,7 +288,7 @@ nmap <expr> <Leader>, ToggleFancies()
 
 " Workaround fun with sys.executable pointing to vim itself on macOS
 if has('osxdarwin')
-  py3 import os, sys; sys.executable = os.path.join(sys.prefix, 'bin', 'python3.7')
+  py3 import os, sys; sys.executable = os.path.join(sys.prefix, 'bin', 'python{}.{}'.format(*sys.version_info[:2]))
 endif
 
 " Specify a directory for plugins
