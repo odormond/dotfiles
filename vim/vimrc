@@ -244,12 +244,12 @@ nnoremap <Leader>< :cprev<cr>
 nnoremap <Leader>> :cnext<cr>
 au FileType python set makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
 
-# Block dragging and duplication
-vmap  <expr>  <Left>   DVB_Drag('left')
-vmap  <expr>  <Right>  DVB_Drag('right')
-vmap  <expr>  <Down>   DVB_Drag('down')
-vmap  <expr>  <Up>     DVB_Drag('up')
-vmap  <expr>  D        DVB_Duplicate()
+# Block dragging and dupplication
+vnoremap <Left>   <ScriptCmd>g:DVB_Drag('left')<CR>
+vnoremap <Right>  <ScriptCmd>g:DVB_Drag('right')<CR>
+vnoremap <Down>   <ScriptCmd>g:DVB_Drag('down')<CR>
+vnoremap <Up>     <ScriptCmd>g:DVB_Drag('up')<CR>
+vnoremap D        <ScriptCmd>g:DVB_Duplicate()<CR>
 # remove any introduced trailing whitespace after moving
 g:DVB_TrimWS = v:true
 

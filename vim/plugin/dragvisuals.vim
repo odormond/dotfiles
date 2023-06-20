@@ -1,345 +1,193 @@
-" Vim global plugin for dragging virtual blocks
-" Last change: Tue Jul 24 07:19:35 EST 2012
-" Maintainer:	Damian Conway
-" License:	This file is placed in the public domain.
+vim9script noclear
+# Vim global plugin for dragging virtual blocks
+# Initially written by Damian Conway and eventually rewritten in vim9script by Olivier Dormond
+# License:	This file is placed in the public domain.
 
-"#########################################################################
-"##                                                                     ##
-"##  Add the following (uncommented) to your .vimrc...                  ##
-"##                                                                     ##
-"##     runtime plugin/dragvisuals.vim                                  ##
-"##                                                                     ##
-"##     vmap  <expr>  <LEFT>   DVB_Drag('left')                         ##
-"##     vmap  <expr>  <RIGHT>  DVB_Drag('right')                        ##
-"##     vmap  <expr>  <DOWN>   DVB_Drag('down')                         ##
-"##     vmap  <expr>  <UP>     DVB_Drag('up')                           ##
-"##     vmap  <expr>  D        DVB_Duplicate()                          ##
-"##                                                                     ##
-"##     " Remove any introduced trailing whitespace after moving...     ##
-"##     let g:DVB_TrimWS = 1                                            ##
-"##                                                                     ##
-"##  Or, if you use the arrow keys for normal motions, choose           ##
-"##  four other keys for block dragging. For example:                   ##
-"##                                                                     ##
-"##     vmap  <expr>  h        DVB_Drag('left')                         ##
-"##     vmap  <expr>  l        DVB_Drag('right')                        ##
-"##     vmap  <expr>  j        DVB_Drag('down')                         ##
-"##     vmap  <expr>  k        DVB_Drag('up')                           ##
-"##                                                                     ##
-"##  Or:                                                                ##
-"##                                                                     ##
-"##     vmap  <expr>  <S-LEFT>   DVB_Drag('left')                       ##
-"##     vmap  <expr>  <S-RIGHT>  DVB_Drag('right')                      ##
-"##     vmap  <expr>  <S-DOWN>   DVB_Drag('down')                       ##
-"##     vmap  <expr>  <S-UP>     DVB_Drag('up')                         ##
-"##                                                                     ##
-"##  Or even:                                                           ##
-"##                                                                     ##
-"##     vmap  <expr>   <LEFT><LEFT>   DVB_Drag('left')                  ##
-"##     vmap  <expr>  <RIGHT><RIGHT>  DVB_Drag('right')                 ##
-"##     vmap  <expr>   <DOWN><DOWN>   DVB_Drag('down')                  ##
-"##     vmap  <expr>     <UP><UP>     DVB_Drag('up')                    ##
-"##                                                                     ##
-"#########################################################################
+#########################################################################
+##                                                                     ##
+##  Add the following (uncommented) to your .vimrc...                  ##
+##                                                                     ##
+##     runtime plugin/dragvisuals.vim                                  ##
+##                                                                     ##
+##     vnoremap  <LEFT>   <ScriptCmd>g:DVB_Drag('left')<CR>            ##
+##     vnoremap  <RIGHT>  <ScriptCmd>g:DVB_Drag('right')<CR>           ##
+##     vnoremap  <DOWN>   <ScriptCmd>g:DVB_Drag('down')<CR>            ##
+##     vnoremap  <UP>     <ScriptCmd>g:DVB_Drag('up')<CR>              ##
+##     vnoremap  D        <ScriptCmd>g:DVB_Duplicate()<CR>             ##
+##                                                                     ##
+##     " Remove any introduced trailing whitespace after moving...     ##
+##     let g:DVB_TrimWS = 1                                            ##
+##                                                                     ##
+#########################################################################
 
 
-" If already loaded, we're done...
-if exists("loaded_dragvirtualblocks")
+# If already loaded, we're done...
+if exists("g:loaded_dragvirtualblocks")
     finish
 endif
-let loaded_dragvirtualblocks = 1
+g:loaded_dragvirtualblocks = 1
 
-" Preserve external compatibility options, then enable full vim compatibility...
-let s:save_cpo = &cpo
+# Preserve external compatibility options, then enable full vim compatibility...
+var save_cpo = &cpo
 set cpo&vim
 
-"====[ Implementation ]====================================
+#====[ Implementation ]====================================
 
-" Toggle this to stop trimming on drags...
+# Toggle this to stop trimming on drags...
 if !exists('g:DVB_TrimWS')
-    let g:DVB_TrimWS = 1
+    g:DVB_TrimWS = 1
 endif
 
-function! DVB_Drag (dir)
-    " No-op in Visual mode...
-    if mode() ==# 'v'
-        return "\<ESC>gv"
-
-    " Do Visual Line drag indirectly via temporary nmap
-    " (to ensure we have access to block position data)...
-    elseif mode() ==# 'V'
-        " Set up a temporary convenience...
-        exec "nnoremap <silent><expr><buffer>  M  \<SID>Drag_Lines('".a:dir."')"
-
-        " Return instructions to implement the move and reset selection...
-        return '"vyM'
-
-    " Otherwise do Visual Block drag indirectly via temporary nmap
-    " (to ensure we have access to block position data)...
-    else
-        " Set up a temporary convenience...
-        exec "nnoremap <silent><expr><buffer>  M  \<SID>Drag_Block('".a:dir."')"
-
-        " Return instructions to implement the move and reset selection...
-        return '"vyM'
+def g:DVB_Drag(dir: string)
+    # No-op in Visual mode
+    if mode() ==# "v"
+        return
     endif
-endfunction
 
-" Duplicate selected block and place to the right...
-function! DVB_Duplicate ()
-    exec "nnoremap <silent><expr><buffer>  M  \<SID>DuplicateBlock()"
-    return '"vyM'
-endfunction
+    # Visual Line drag or visual block drag
+    DVB_wrapper(mode() ==# 'V' ? () => Drag_Lines(dir) : () => Drag_Block(dir))
+enddef
 
-function! s:DuplicateBlock ()
-    nunmap <buffer>  M
-    " Locate block boundaries...
-    let [buf_left,  line_left,  col_left,  offset_left ] = getpos("'<")
-    let [buf_right, line_right, col_right, offset_right] = getpos("'>")
+# Duplicate selected block and place to the right...
+def g:DVB_Duplicate()
+    DVB_wrapper(() => Duplicate_Block())
+enddef
 
-    " Identify special '$' blocks...
-    let dollar_block = 0
-    let start_col    = min([col_left+offset_left, col_right+offset_right])
-    let end_col      = max([col_left+offset_left, col_right+offset_right])
-    let visual_width = end_col - start_col + 1
-    for visual_line in split(getreg("v"),"\n")
-        if strlen(visual_line) > visual_width
-            let dollar_block = 1
-            let visual_width = strlen(visual_line)
-        endif
-    endfor
-    let square_up = (dollar_block ? (start_col+visual_width-2).'|' : '')
+def DVB_wrapper(Fn: func(): string)
+    var saved_report = &report
+    var saved_reg_v = @v
+    var saved_virtualedit = &virtualedit
 
-    set virtualedit=all
-    return 'gv'.square_up.'yPgv'
-        \. (visual_width-dollar_block) . 'lo' . (visual_width-dollar_block) . 'l'
-        \. "y:set virtualedit=block\<CR>gv"
-        \. (dollar_block ? 'o$' : '')
-endfunction
+    # Silent reporting count of changed lines
+    &report = 1000000000
 
+    # Ensure cursor is on the right so we can properly square up the selection.
+    var [_, _, start_col, start_offset] = getpos("v")
+    var [_, _, cursor_col, cursor_offset] = getpos(".")
+    var swap_start_and_cursor = start_col + start_offset > cursor_col + cursor_offset
+    if swap_start_and_cursor
+        normal! o
+    endif
 
-" Kludge to hide change reporting inside implementation...
-let s:NO_REPORT   = ":let b:DVB_report=&report\<CR>:let &report=1000000000\<CR>"
-let s:PREV_REPORT = ":let &report = b:DVB_report\<CR>"
+    # Capture visual selection into register. This force updates the marks '< and '>.
+    # In bloc mode, it is used to find the actual size of the block as $ can extend it beyond the
+    # cursor position.
+    normal! "vy
 
+    var seq = Fn()
+    exec "silent normal! " .. seq
 
-" Drag in specified direction in Visual Line mode...
-function! s:Drag_Lines (dir)
-    " Clean up the temporary convenience...
-    nunmap <buffer>  M
+    nohlsearch
 
-    " Locate block being shifted...
-    let [buf_left,  line_left,  col_left,  offset_left ] = getpos("'<")
-    let [buf_right, line_right, col_right, offset_right] = getpos("'>")
+    # Restore stuffs
+    if swap_start_and_cursor
+        normal! o
+    endif
+    &virtualedit = saved_virtualedit
+    @v = saved_reg_v
+    &report = saved_report
+enddef
 
-    " Drag entire lines left if possible...
-    if a:dir == 'left'
-        " Are all lines indented at least one space???
-        let lines        = getline(line_left, line_right)
-        let all_indented = match(lines, '^[^ ]') == -1
-        nohlsearch
+# Drag in specified direction in Visual Line mode...
+def Drag_Lines(dir: string): string
+    # Locate block being shifted...
+    var [_, line_left,  col_left,  offset_left ] = getpos("'<")
+    var [_, line_right, col_right, offset_right] = getpos("'>")
 
-        " If can't trim one space from start of each line, be a no-op...
-        if !all_indented
-            return 'gv'
+    if dir == 'left'
+        # Are all lines indented at least one space???
+        var lines        = getline(line_left, line_right)
+        var all_indented = match(lines, '^[^ ]') == -1
 
-        " Otherwise drag left by removing one space from start of each line...
-        else
-            return    s:NO_REPORT
-                  \ . "gv:s/^ //\<CR>"
-                  \ . s:PREV_REPORT
-                  \ . "gv"
-        endif
+        # Drag left by removing one space from start of each line unless a line is not indented.
+        return all_indented ? ":'<,'>s/^ //\<CR>gv" : "gv"
 
-    " To drag entire lines right, add a space in column 1...
-    elseif a:dir == 'right'
-        return   s:NO_REPORT
-             \ . "gv:s/^/ /\<CR>:nohlsearch\<CR>"
-             \ . s:PREV_REPORT
-             \ . "gv"
+    elseif dir == 'right'
+        return ":'<,'>s/^/ /\<CR>gv"
 
-    " To drag entire lines upwards...
-    elseif a:dir == 'up'
-        let EOF = line('$')
-
-        " Can't drag up if at first line...
+    elseif dir == 'up'
+        # Can't drag up if at first line...
         if line_left == 1 || line_right == 1
-            return 'gv'
-
-        " Needs special handling at EOF (because cursor moves up on delete)...
-        elseif line_left == EOF || line_right == EOF
-            let height = line_right - line_left
-            let select_extra = height ? height . 'j' : ""
-            return   s:NO_REPORT
-                 \ . 'gvxP'
-                 \ . s:PREV_REPORT
-                 \ . 'V' . select_extra
-
-        " Otherwise just cut-move-paste-reselect...
-        else
-            let height = line_right - line_left
-            let select_extra = height ? height . 'j' : ""
-            return   s:NO_REPORT
-                 \ . 'gvxkP'
-                 \ . s:PREV_REPORT
-                 \ . 'V' . select_extra
+            return "gv"
         endif
 
-    " To drag entire lines downwards...
-    elseif a:dir == 'down'
-        let EOF = line('$')
+        # This is how much extra we're going to have to reselect...
+        var height = line_right - line_left
+        var select_extra = height > 0 ? height .. 'j' : ""
+        # Needs special handling at EOF (because cursor moves up on delete)...
+        var EOF = line('$')
+        return "gv" .. (line_left == EOF || line_right == EOF ? "xP" : "xkP") .. "V" .. select_extra
 
-        " This is how much extra we're going to have to reselect...
-        let height = line_right - line_left
-        let select_extra = height ? height . 'j' : ""
+    elseif dir == 'down'
+        # This is how much extra we're going to have to reselect...
+        var height = line_right - line_left
+        var select_extra = height > 0 ? height .. 'j' : ""
 
-        " Needs special handling at EOF (to push selection down into new space)...
+        # Needs special handling at EOF (to push selection down into new space)...
+        var EOF = line('$')
         if line_left == EOF || line_right == EOF
-            return   "O\<ESC>gv"
+            return "O\<ESC>gv"
 
-        " Otherwise, just cut-move-paste-reselect...
+        # Otherwise, just cut-move-paste-reselect...
         else 
-            return   s:NO_REPORT
-                 \ . 'gvxp'
-                 \ . s:PREV_REPORT
-                 \ . 'V' . select_extra
+            return "gvxpV" .. select_extra
         endif
 
+    # Unknown direction
+    else
+        echoerr "Invalid argument: " .. dir .. ". Allowed values are 'left', 'right', 'up' and 'down'"
+        return "gv"
     endif
-endfunction
+enddef
 
-" Drag in specified direction in Visual Block mode...
-function! s:Drag_Block (dir)
-    " Clean up the temporary convenience...
-    nunmap <buffer>  M
+# Drag in specified direction in Visual Block mode...
+def Drag_Block(dir: string): string
+    # Locate block being shifted...
+    var [_, line_left,  col_left,  offset_left ] = getpos("'<")
+    var [_, line_right, col_right, offset_right] = getpos("'>")
 
-    " Locate block being shifted...
-    let [buf_left,  line_left,  col_left,  offset_left ] = getpos("'<")
-    let [buf_right, line_right, col_right, offset_right] = getpos("'>")
+    # Can't drag upwards at top margin or left at left margin.
+    if (dir == 'up' && (line_left == 1 || line_right == 1))
+        || (dir == 'left' && (col_left == 1 || col_right == 1))
+        return "gv"
+    endif
 
-    " Identify special '$' blocks...
-    let dollar_block = 0
-    let start_col    = min([col_left+offset_left, col_right+offset_right])
-    let end_col      = max([col_left+offset_left, col_right+offset_right])
-    let visual_width = end_col - start_col + 1
-    for visual_line in split(getreg("v"),"\n")
+    var [start_col, visual_width, dollar_block, square_up] = Size_Block(col_left, offset_left, col_right, offset_right)
+
+    var initial_trim_ws = g:DVB_TrimWS ? ":'<,'>s/\\s*$//\<CR>" : ""
+    var final_trim_ws = g:DVB_TrimWS ? ":s/\\s*$//\<CR>gv" : ""
+    # May need to be able to temporarily step past EOL...
+    set virtualedit=all
+
+    var key = {"left": "h", "right": "l", "up": "k", "down": "j"}[dir]
+    return square_up .. "x" .. key .. "P" .. initial_trim_ws .. square_up .. key .. "o" .. key .. "o" .. final_trim_ws
+enddef
+
+def Duplicate_Block(): string
+    var [_, _, col_left,  offset_left ] = getpos("'<")
+    var [_, _, col_right, offset_right] = getpos("'>")
+
+    var [start_col, visual_width, dollar_block, square_up] = Size_Block(col_left, offset_left, col_right, offset_right)
+    visual_width -= dollar_block
+    set virtualedit=all
+    return square_up .. 'yPgv' .. visual_width .. 'lo' .. visual_width .. 'loygv' .. (dollar_block ? 'o$' : '')
+enddef
+
+def Size_Block(col_left: number, offset_left: number, col_right: number, offset_right: number): list<any>
+    # Identify special '$' blocks...
+    var dollar_block = 0
+    var start_col    = min([col_left + offset_left, col_right + offset_right])
+    var end_col      = max([col_left + offset_left, col_right + offset_right])
+    var visual_width = end_col - start_col + 1
+    for visual_line in split(getreg("v"), "\n")
         if strlen(visual_line) > visual_width
-            let dollar_block = 1
-            let visual_width = strlen(visual_line)
+            dollar_block = 1
+            visual_width = strlen(visual_line)
         endif
     endfor
-    let square_up = (dollar_block ? (start_col+visual_width-2).'|' : '')
+    var square_up = "gv" .. (start_col + visual_width - 1 - dollar_block) .. "|"
+    return [start_col, visual_width, dollar_block, square_up]
+enddef
 
-    " Drag left...
-    if a:dir == 'left'
-        "Can't drag left at left margin...
-        if col_left == 1 || col_right == 1
-            return 'gv'
-
-        " Otherwise reposition one column left (and optionally trim any whitespace)...
-        elseif g:DVB_TrimWS
-            " May need to be able to temporarily step past EOL...
-            let prev_ve = &virtualedit
-            set virtualedit=all
-
-            " Are we moving past other text???
-            let square_up_final = ""
-            if dollar_block
-                let lines = getline(line_left, line_right)
-                if match(lines, '^.\{'.(start_col-2).'}\S') >= 0
-                    let dollar_block = 0
-                    let square_up_final = (start_col+visual_width-3).'|'
-                endif
-            endif
-
-            let vcol = start_col - 2
-            return   'gv'.square_up.'xhP'
-                 \ . s:NO_REPORT
-                 \ . "gvhoho:s/\\s*$//\<CR>gv\<ESC>"
-                 \ . ':set virtualedit=' . prev_ve . "\<CR>"
-                 \ . s:PREV_REPORT
-                 \ . ":nohlsearch\<CR>gv"
-                 \ . (dollar_block ? '$' : square_up_final )
-        else
-            return 'gv'.square_up.'xhPgvhoho'
-        endif
-
-    " Drag right...
-    elseif a:dir == 'right'
-        " May need to be able to temporarily step past EOL...
-        let prev_ve = &virtualedit
-        set virtualedit=all
-
-        " Reposition block one column to the right...
-        if g:DVB_TrimWS
-            let vcol = start_col
-            return   'gv'.square_up.'xp'
-                 \ . s:NO_REPORT
-                 \ . "gvlolo"
-                 \ . ":s/\\s*$//\<CR>gv\<ESC>"
-                 \ . ':set virtualedit=' . prev_ve . "\<CR>"
-                 \ . s:PREV_REPORT
-                 \ . (dollar_block ? 'gv$' : 'gv')
-        else
-            return 'gv'.square_up.'xp:set virtualedit=' . prev_ve . "\<CR>gvlolo"
-        endif
-
-    " Drag upwards...
-    elseif a:dir == 'up'
-        " Can't drag upwards at top margin...
-        if line_left == 1 || line_right == 1
-            return 'gv'
-        endif
-
-        " May need to be able to temporarily step past EOL...
-        let prev_ve = &virtualedit
-        set virtualedit=all
-
-        " If trimming whitespace, jump to just below block to do it...
-        if g:DVB_TrimWS
-            let height = line_right - line_left + 1
-            return  'gv'.square_up.'xkPgvkoko"vy'
-                    \ . height
-                    \ . 'j:s/\s*$//'
-                    \ . "\<CR>:nohlsearch\<CR>:set virtualedit="
-                    \ . prev_ve
-                    \ . "\<CR>gv"
-                    \ . (dollar_block ? '$' : '')
-
-        " Otherwise just move and reselect...
-        else
-            return   'gv'.square_up.'xkPgvkoko"vy:set virtualedit='
-                    \ . prev_ve
-                    \ . "\<CR>gv"
-                    \ . (dollar_block ? '$' : '')
-        endif
-
-    " Drag downwards...
-    elseif a:dir == 'down'
-        " May need to be able to temporarily step past EOL...
-        let prev_ve = &virtualedit
-        set virtualedit=all
-
-        " If trimming whitespace, move to just above block to do it...
-        if g:DVB_TrimWS
-            return   'gv'.square_up.'xjPgvjojo"vyk:s/\s*$//'
-                    \ . "\<CR>:nohlsearch\<CR>:set virtualedit="
-                    \ . prev_ve
-                    \ . "\<CR>gv"
-                    \ . (dollar_block ? '$' : '')
-
-        " Otherwise just move and reselect...
-        else
-            return   'gv'.square_up.'xjPgvjojo"vy'
-                    \ . "\<CR>:set virtualedit="
-                    \ . prev_ve
-                    \ . "\<CR>gv"
-                    \ . (dollar_block ? '$' : '')
-        endif
-    endif
-endfunction
-
-
-" Restore previous external compatibility options
-let &cpo = s:save_cpo
-
+# Restore previous external compatibility options
+&cpo = save_cpo
