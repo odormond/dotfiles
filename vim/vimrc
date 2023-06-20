@@ -1,10 +1,13 @@
-" Environment
+vim9script
+set runtimepath+=/Users/odie/Devel/python/vpdb
+
+# Environment
 set nocompatible
 scriptencoding utf-8
 set termencoding=utf-8
 set encoding=utf-8
 
-" Directories for various vim support files
+# Directories for various vim support files
 silent execute '!mkdir -p $HOME/.vim/tmp/{backup,swap,view,undo}'
 set backupdir=~/.vim/tmp/backup/
 set backup
@@ -15,59 +18,59 @@ set undofile
 set viminfo=!,'100,<50,s10,h,n~/.vim/tmp/viminfo
 set cryptmethod=blowfish2
 
-" Easier to reach <Leader>
-let mapleader=","
-let maplocalleader=mapleader " Same char for buffer local leader
+# Easier to reach <Leader>
+g:mapleader = ","
+g:maplocalleader = g:mapleader # Same char for buffer local leader
 
-" Editing
+# Editing
 set hidden
 set expandtab
 set tabstop=4
 set shiftwidth=4
-"set fileencodings=utf-8
+#set fileencodings=utf-8
 set nojoinspaces
 set nostartofline
 set autoindent
-function! InjectGitBranch(type, ...)
-  let sel_save = &selection
-  let &selection = "inclusive"
-  let reg_save = @@
+def InjectGitBranch(mode: string, is_visual=false)
+  var sel_save = &selection
+  &selection = "inclusive"
+  var reg_save = getreginfo()
 
-  let branch = b:buffer_vcs_config['git']['branch']
-  echomsg "arg: " . a:0 . " type: " . a:type
-  if a:0  " Invoked from visual mode
-    silent exe "normal! gvc" . branch
-  elseif a:type == 'line'
-    silent exe "normal! '[V']c" . branch
+  var branch = b:buffer_vcs_config['git']['branch']
+  if is_visual
+    # Invoked from visual mode
+    exe "normal! c" .. branch
+  elseif mode == 'line'
+    exe "normal! '[V']c" .. branch
   else
-    silent exe "normal! `[v`]c" . branch
+    exe "normal! `[v`]c" .. branch
   endif
 
-  let &selection = sel_save
-  let @@ = reg_save
-endfunction
-nmap <Leader>b :set opfunc=InjectGitBranch<CR>g@
-xmap <Leader>b :<C-U>call InjectGitBranch(visualmode(), 1)<CR>
+  &selection = sel_save
+  setreg(v:register, reg_save)
+enddef
+nnoremap <Leader>b <ScriptCmd>set opfunc=InjectGitBranch<CR>g@
+xnoremap <Leader>b <ScriptCmd>InjectGitBranch(visualmode(), true)<CR>
 
-" Visuals
+# Visuals
 set visualbell
 set title
 set foldmethod=syntax
 set foldenable
 set foldlevel=99
 set foldtext=MyFoldText()
-function! MyFoldText()
-  let line = getline(v:foldstart)
-  let space = substitute(line, '\s\?\S.*', '', '')
-  let indent = substitute(substitute(line, '\s\?\S.*', '', ''), '\s', '-', 'g')
-  let text = substitute(line, '^\s*', '', '')
-  let n_lines = v:foldend - v:foldstart + 1
+def MyFoldText(): string
+  var line = getline(v:foldstart)
+  var space = substitute(line, '\s\?\S.*', '', '')
+  var indent = substitute(substitute(line, '\s\?\S.*', '', ''), '\s', '-', 'g')
+  var text = substitute(line, '^\s*', '', '')
+  var n_lines = v:foldend - v:foldstart + 1
   if indent != ''
-    let indent = indent . ' '
+    indent = indent .. ' '
   endif
-  return printf("%s%s (%d lines)", indent, text, n_lines)
-endfunction
-syntax on " Before setting colorscheme because it reset colors
+  return printf("%s%s (%d lines) ", indent, text, n_lines)
+enddef
+syntax on # Before setting colorscheme because it reset colors
 set number
 set relativenumber
 set numberwidth=3
@@ -81,34 +84,35 @@ else
   set signcolumn=yes
 endif
 
+# Enable advanced styling like double underline and undercurl
 set t_Us=[4:2m
 set t_Cs=[4:3m
 set t_Ce=[4:0m
 set t_AU=[58;5;%dm
 
 
-"" search improvements
+## search improvements
 set incsearch
-set hlsearch  " hide highlighting with :nohls instead of unsetting it
+set hlsearch  # hide highlighting with :nohls instead of unsetting it
 nnoremap <Leader>- :nohls<cr>
-"nnoremap <silent> n n:call HLNext(0.01, 2)<cr>
-"nnoremap <silent> N N:call HLNext(0.01, 2)<cr>
-"function! HLNext (blinktime, count)
-"  let [bufnum, lnum, col, off] = getpos('.')
-"  let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
-"  let target_pat = '\c\%#'.@/
-"  let counter = a:count
-"  while counter
-"    let ring = matchadd('SearchHl', target_pat, 101)
-"    redraw
-"    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-"    call matchdelete(ring)
-"    redraw
-"    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
-"    let counter -= 1
-"  endwhile
-"endfunction
-" command line completion improvements
+#nnoremap <silent> n n:call HLNext(0.01, 2)<cr>
+#nnoremap <silent> N N:call HLNext(0.01, 2)<cr>
+#function! HLNext (blinktime, count)
+#  let [bufnum, lnum, col, off] = getpos('.')
+#  let matchlen = strlen(matchstr(strpart(getline('.'),col-1),@/))
+#  let target_pat = '\c\%#'.@/
+#  let counter = a:count
+#  while counter
+#    let ring = matchadd('SearchHl', target_pat, 101)
+#    redraw
+#    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+#    call matchdelete(ring)
+#    redraw
+#    exec 'sleep ' . float2nr(a:blinktime * 1000) . 'm'
+#    let counter -= 1
+#  endwhile
+#endfunction
+# command line completion improvements
 set wildmenu
 set wildmode=longest:full,full
 set wildignore=*.pyc,*.pyo,__pycache__
@@ -117,74 +121,74 @@ set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.tiff,*.pdf
 set wildignore+=*.tar,*.gz,*.bz2
 set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
 
-""" file / buffer navigation
-" automaticallly search bellow the current directory
+### file / buffer navigation
+# automaticallly search bellow the current directory
 set path+=**
-" always make the directory containing the edited file the current dir. Follows focus.
-"set autochdir
-" edit file under the cursor in a vertical split
+# always make the directory containing the edited file the current dir. Follows focus.
+#set autochdir
+# edit file under the cursor in a vertical split
 nnoremap gf :vertical wincmd f<CR>
-" switch to alternate buffer in same window
+# switch to alternate buffer in same window
 nnoremap <BS> <C-^>
 
-"set list
+#set list
 set listchars=eol:↵,tab:⇥\ ,trail:⏘,extends:⇢,precedes:⇠,conceal:\ ,nbsp:⏙
-"set showbreak=↪ " For consistency with list mode but useless due to numberline
-set ttyfast " should always be true nowadays
-"set lazyredraw
+#set showbreak=↪ # For consistency with list mode but useless due to numberline
+set ttyfast # should always be true nowadays
+#set lazyredraw
 set ruler
 set splitbelow splitright
 set shortmess=filmnrwxoOtTc
-"flag	meaning when present
-"  f	use "(3 of 5)" instead of "(file 3 of 5)"
-"  i	use "[noeol]" instead of "[Incomplete last line]"
-"  l	use "999L, 888B" instead of "999 lines, 888 bytes"
-"  m	use "[+]" instead of "[Modified]"
-"  n	use "[New]" instead of "[New File]"
-"  r	use "[RO]" instead of "[readonly]"
-"  w	use "[w]" instead of "written" for file write message
-"	    and "[a]" instead of "appended" for ':w >> file' command
-"  x	use "[dos]" instead of "[dos format]", "[unix]" instead of
-"	    "[unix format]" and "[mac]" instead of "[mac format]".
-"  o	overwrite message for writing a file with subsequent message
-"	    for reading a file (useful for ":wn" or when 'autowrite' on)
-"  O	message for reading a file overwrites any previous message.
-"	    Also for quickfix message (e.g., ":cn").
-"  t	truncate file message at the start if it is too long to fit
-"	    on the command-line, "<" will appear in the left most column.
-"  T	truncate other messages in the middle if they are too long to
-"	    fit on the command line.  "..." will appear in the middle.
-"  c	don't give |ins-completion-menu| messages.  For example,
-"	    "-- XXX completion (YYY)", "match 1 of 2", "The only match",
-"	    "Pattern not found", "Back at original", etc.
+#flag	meaning when present
+#  f	use "(3 of 5)" instead of "(file 3 of 5)"
+#  i	use "[noeol]" instead of "[Incomplete last line]"
+#  l	use "999L, 888B" instead of "999 lines, 888 bytes"
+#  m	use "[+]" instead of "[Modified]"
+#  n	use "[New]" instead of "[New File]"
+#  r	use "[RO]" instead of "[readonly]"
+#  w	use "[w]" instead of "written" for file write message
+#	    and "[a]" instead of "appended" for ':w >> file' command
+#  x	use "[dos]" instead of "[dos format]", "[unix]" instead of
+#	    "[unix format]" and "[mac]" instead of "[mac format]".
+#  o	overwrite message for writing a file with subsequent message
+#	    for reading a file (useful for ":wn" or when 'autowrite' on)
+#  O	message for reading a file overwrites any previous message.
+#	    Also for quickfix message (e.g., ":cn").
+#  t	truncate file message at the start if it is too long to fit
+#	    on the command-line, "<" will appear in the left most column.
+#  T	truncate other messages in the middle if they are too long to
+#	    fit on the command line.  "..." will appear in the middle.
+#  c	don't give |ins-completion-menu| messages.  For example,
+#	    "-- XXX completion (YYY)", "match 1 of 2", "The only match",
+#	    "Pattern not found", "Back at original", etc.
 set backspace=indent,eol,start
 set spelllang=en_gb,fr
 set shiftround
 set timeoutlen=500
 set ttimeoutlen=50
 
-" Line wrapping display tunning
+# Line wrapping display tunning
 set nowrap
 set linebreak
 set breakindent
 set breakindentopt=min:20,shift:8
 
-set synmaxcol=256 " Don't look to far away for syntax highlighting. Will speed things up.
+set synmaxcol=256 # Don't look to far away for syntax highlighting. Will speed things up.
 set colorcolumn=100,200
-colorscheme odie " Disable for light background
-" set bg=light
+colorscheme odie # Disable for light background
+# set bg=light
 
 
-" Diff
+# Diff
 set diffopt+=iwhite,vertical
 
-" Window navigation
-" ^l is redefined from the default mapping meaning to clear and redraw the screen.
-" These are redefined in tmux to allow transparent movements between tmux panes and vim windows
-"nnoremap <C-h> <C-w>h
-"nnoremap <C-j> <C-w>j
-"nnoremap <C-k> <C-w>k
-"nnoremap <C-l> <C-w>l
+# Window navigation
+# ^l is redefined from the default mapping meaning to clear and redraw the screen.
+# These are redefined in tmux to allow transparent movements between tmux panes and vim windows
+#nnoremap <C-h> <C-w>h
+#nnoremap <C-j> <C-w>j
+#nnoremap <C-k> <C-w>k
+#nnoremap <C-l> <C-w>l
 nnoremap <C-w>1 1<C-w><C-w>
 nnoremap <C-w>2 2<C-w><C-w>
 nnoremap <C-w>3 3<C-w><C-w>
@@ -195,33 +199,33 @@ nnoremap <C-w>7 7<C-w><C-w>
 nnoremap <C-w>8 8<C-w><C-w>
 nnoremap <C-w>9 9<C-w><C-w>
 
-" Window spliting
+# Window spliting
 nnoremap <Leader>= :vsplit<cr>
 nnoremap <Leader>" :split<cr>
 
-" regular shape for visual block
+# regular shape for visual block
 set virtualedit=block
 
-" easier alteration of indentation of code blocks by keeping the visual selection alive
+# easier alteration of indentation of code blocks by keeping the visual selection alive
 vnoremap < <gv
 vnoremap > >gv
 
-" don't override the yanked text by the replaced one
+# don't override the yanked text by the replaced one
 xnoremap p pgvy
 
-" Search uses classical regexes instead of vim ones
+# Search uses classical regexes instead of vim ones
 nnoremap / /\v
 vnoremap / /\v
 nnoremap ? ?\v
 vnoremap ? ?\v
 
-" complement pair matching:
-set matchpairs+="<:>,«:»"
+# complement pair matching:
+set matchpairs+=<:>,«:»
 
-" Avoid moving so far away
+# Avoid moving so far away
 inoremap jk <Esc>
 inoremap kj <Esc>
-" enforce forgetting about the cursor keys
+# enforce forgetting about the cursor keys
 noremap <Up> <nop>
 noremap <Down> <nop>
 noremap <Left> <nop>
@@ -231,150 +235,152 @@ inoremap <Down> <nop>
 inoremap <Left> <nop>
 inoremap <Right> <nop>
 
-" quick toggle of paste mode
-nmap <Leader>o :set paste!<cr>
+# quick toggle of paste mode
+nnoremap <Leader>o :set paste!<cr>
 
-" Quickfix shorthand
+# Quickfix shorthand
 nnoremap <Leader>m :make<cr>
 nnoremap <Leader>< :cprev<cr>
 nnoremap <Leader>> :cnext<cr>
 au FileType python set makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
 
-" Block dragging and dupplication
+# Block dragging and duplication
 vmap  <expr>  <Left>   DVB_Drag('left')
 vmap  <expr>  <Right>  DVB_Drag('right')
 vmap  <expr>  <Down>   DVB_Drag('down')
 vmap  <expr>  <Up>     DVB_Drag('up')
 vmap  <expr>  D        DVB_Duplicate()
-" remove any introduced trailing whitespace after moving
-let g:DVB_TrimWS = 1
+# remove any introduced trailing whitespace after moving
+g:DVB_TrimWS = v:true
 
-" Show changes made to the current buffer that are not saved yet.
-command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+# Show changes made to the current buffer that are not saved yet.
+command! DiffOrig vert new | set bt=nofile | r \# | 0d_ | diffthis | wincmd p | diffthis
 
 augroup vimrc
   autocmd!
 
-  " automatically reload vimrc when it's saved
+  # automatically reload vimrc when it's saved
   au BufWritePost .vimrc so ~/.vim/vimrc
   au BufWritePost vimrc so ~/.vim/vimrc
 
-  " When editing a file, always jump to the last known cursor position.
-  " Don't do it when the position is invalid or when inside an event handler
-  " (happens when dropping a file on gvim).
+  # When editing a file, always jump to the last known cursor position.
+  # Don't do it when the position is invalid or when inside an event handler
+  # (happens when dropping a file on gvim).
   autocmd BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
 
-  " Detect hcl files and treat them as tf files
+  # Detect hcl files and treat them as tf files
   autocmd BufNewFile,BufRead *.hcl setfiletype tf
 augroup END
 
-" personal quick help
-function! PersonalHelp()
-  let filename=findfile("personal.hlp", &runtimepath)
+# personal quick help
+def PersonalHelp()
+  var filename = findfile("personal.hlp", &runtimepath)
   if filereadable(filename)
     echo join(readfile(filename), "\n")
   endif
-endfunction
-nmap <expr> <Leader>? PersonalHelp()
+enddef
+nnoremap <Leader>? <ScriptCmd>PersonalHelp()<CR>
 
-" Toggle showmarks and number to allow copying text
-let s:colorcolumn = &colorcolumn
-function! ColorColumnToggle()
+# Toggle showmarks and number to allow copying text
+var saved_colorcolumn = &colorcolumn
+def ColorColumnToggle()
   if &colorcolumn == ""
-    exe "set colorcolumn=" . s:colorcolumn
+    #exe "set colorcolumn=" .. colorcolumn
+    &colorcolumn = saved_colorcolumn
   else
-    set colorcolumn=
+    saved_colorcolumn = &colorcolumn
+    &colorcolumn = ""
   endif
-endfunction
-function! ToggleFancies()
+enddef
+def ToggleFancies()
   GitGutterSignsToggle
   IndentLinesToggle
-  call ColorColumnToggle()
+  ColorColumnToggle()
   set number!
   set relativenumber!
-endfunction
-nmap <expr> <Leader>, ToggleFancies()
+enddef
+nnoremap <Leader><Leader> <ScriptCmd>ToggleFancies()<CR>
 
-" Workaround fun with sys.executable pointing to vim itself on macOS
+# Workaround fun with sys.executable pointing to vim itself on macOS
 if has('osxdarwin')
   py3 import os, sys; sys.executable = os.path.join(sys.prefix, 'bin', 'python{}.{}'.format(*sys.version_info[:2]))
 endif
 
-" Specify a directory for plugins
-call plug#begin('~/.vim/plugged')
+# Specify a directory for plugins
+plug#begin('~/.vim/plugged')
 
-"====== use NERDtree instead of netrw ======
-let g:loaded_netrw=1
-let g:loaded_netrwPlugin=1
+#====== use NERDtree instead of netrw ======
+g:loaded_netrw = 1
+g:loaded_netrwPlugin = 1
 nnoremap <Leader>no :NERDTreeVCS %:h<cr>
 nnoremap <Leader>nc :NERDTreeClose<cr>
 Plug 'preservim/nerdtree'
 
-"====== use the tab key for completion ======
-let g:SuperTabDefaultCompletionType = 'context'
-let g:SuperTabContextDefaultCompletionType = "<c-n>"
-let g:SuperTabLongestEnhanced=1
-let g:SuperTabLongestHighlight=1
-let g:SuperTabCrMapping=1
-"Plug 'ervandew/supertab'
+#====== use the tab key for completion ======
+g:SuperTabDefaultCompletionType = 'context'
+g:SuperTabContextDefaultCompletionType = "<c-n>"
+g:SuperTabLongestEnhanced = 1
+g:SuperTabLongestHighlight = 1
+g:SuperTabCrMapping = 1
+#Plug 'ervandew/supertab'
 
-"====== code structure identification and navigation ======
+#====== code structure identification and navigation ======
 nnoremap <Leader>to :TagbarOpen fj<cr>
 nnoremap <Leader>tc :TagbarClose<cr>
 au BufEnter __Tagbar__.* nnoremap <buffer> <esc> :wincmd p<cr>
-let g:tagbar_left=1
-let g:tagbar_zoomwidth=0
-let g:tagbar_compact=1
-let g:tagbar_indent=2
-let g:tagbar_show_visibility=0
-let g:tagbar_previewwin_pos="belowright"
+g:tagbar_left = 1
+g:tagbar_zoomwidth = 0
+g:tagbar_compact = 1
+g:tagbar_indent = 2
+g:tagbar_show_visibility = 0
+g:tagbar_previewwin_pos = "belowright"
 Plug 'majutsushi/tagbar'
 
-"====== Window zooming ======
-nmap <Leader>z <Plug>(zoom-toggle)
+#====== Window zooming ======
+nnoremap <Leader>z <Plug>(zoom-toggle)
 Plug 'dhruvasagar/vim-zoom'
 
-"====== Window swaping ======
+#====== Window swaping ======
 Plug 'wesQ3/vim-windowswap'
 
-"====== Fancy status line with airline =====
+#====== Fancy status line with airline =====
 set laststatus=2
-let g:airline_theme="odie"
-let g:airline_powerline_fonts=1
-let g:airline#extensions#branch#use_vcscommand=0
-let g:airline#extensions#branch#displayed_head_limit=11
-let g:airline#extensions#coc#enabled=1
-let g:airline#extensions#hunks#non_zero_only=1
-let g:airline#extensions#searchcount#enabled=0
-let g:airline#extensions#tagbar#flags='f'
-let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
-function! s:setup_airline()
-  let g:airline_section_c=airline#section#create_left(['file', 'readonly', 'tagbar'])
-  let g:airline_section_x=airline#section#create(['filetype'])
-  let g:airline_section_y=airline#section#create(['ffenc', 'windowswap'])
-  let g:airline_section_z=airline#section#create(['%3p%% ', 'linenr', ':%3v [%{winnr()}]'])
-endfunction
-autocmd User AirlineAfterInit call s:setup_airline()
+g:airline_theme = "odie"
+g:airline_powerline_fonts = 1
+g:airline#extensions#branch#use_vcscommand = 0
+g:airline#extensions#branch#displayed_head_limit = 11
+g:airline#extensions#coc#enabled = 1
+g:airline#extensions#hunks#non_zero_only = 1
+g:airline#extensions#searchcount#enabled = 0
+g:airline#extensions#tagbar#flags = 'f'
+g:airline#parts#ffenc#skip_expected_string = 'utf-8[unix]'
+def Setup_airline()
+  g:airline_section_c = airline#section#create_left(['file', 'readonly', 'tagbar'])
+  g:airline_section_x = airline#section#create(['filetype'])
+  g:airline_section_y = airline#section#create(['ffenc', 'windowswap'])
+  g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%3v [%{winnr()}]'])
+enddef
+autocmd User AirlineAfterInit Setup_airline()
 Plug 'vim-airline/vim-airline'
 
-"====== make . support some more plugin mapping ======
+#====== make . support some more plugin mapping ======
 Plug 'tpope/vim-repeat'
 
-"====== square brackets shortcuts for paired commands ======
+#====== square brackets shortcuts for paired commands ======
 Plug 'tpope/vim-unimpaired'
 
-"====== hunk managment with fugitive ======
+#====== hunk managment with fugitive ======
 Plug 'tpope/vim-fugitive'
-function s:git_graph()
-  let buf_nr = bufadd("git graph")
-  let win_nr = bufwinnr(buf_nr)
+def Git_graph()
+  var buf_nr = bufadd("git graph")
+  var win_nr = bufwinnr(buf_nr)
   if win_nr == -1
-    exe buf_nr . 'buffer'
+    exe buf_nr .. 'buffer'
   else
-    exe win_nr . 'wincmd w'
+    exe win_nr .. 'wincmd w'
   endif
   setlocal buftype=nofile bufhidden=hide nobuflisted noswapfile nomodified modifiable
   silent exe '%delete'
@@ -394,68 +400,68 @@ function s:git_graph()
   highlight gitGraphLocalBranch ctermfg=Green
   highlight gitGraphRemoteBranch ctermfg=Red
   highlight gitGraphTag ctermfg=Yellow
-endfunction
-command Gg call s:git_graph()
-"syn match gitGraphLine /[*|]/
+enddef
+command Gg Git_graph()
+#syn match gitGraphLine /[*|]/
 
-"====== git branch viewer for fugitive ======
+#====== git branch viewer for fugitive ======
 Plug 'rbong/vim-flog'
 
-"====== (un)comment stuff out ======
+#====== (un)comment stuff out ======
 Plug 'tpope/vim-commentary'
 
-"====== direct interaction with tmux, particularly buffers ======
+#====== direct interaction with tmux, particularly buffers ======
 Plug 'tpope/vim-tbone'
 
-"====== increment/decrement date, time, ... and not just numbers ======
+#====== increment/decrement date, time, ... and not just numbers ======
 Plug 'tpope/vim-speeddating'
 
-"====== extend fugitive with a nice TUI to manage branches ======
+#====== extend fugitive with a nice TUI to manage branches ======
 Plug 'idanarye/vim-merginal'
 
-"====== change marker with gitgutter ======
+#====== change marker with gitgutter ======
 Plug 'airblade/vim-gitgutter', { 'branch': 'main' }
 highlight SignColumn ctermbg=NONE guibg=NONE
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [h <Plug>(GitGutterPrevHunk)
-omap ih <Plug>(GitGutterTextObjectInnerPending)
-omap ah <Plug>(GitGutterTextObjectOuterPending)
-xmap ih <Plug>(GitGutterTextObjectInnerVisual)
-xmap ah <Plug>(GitGutterTextObjectOuterVisual)
+nnoremap ]h <Plug>(GitGutterNextHunk)
+nnoremap [h <Plug>(GitGutterPrevHunk)
+onoremap ih <Plug>(GitGutterTextObjectInnerPending)
+onoremap ah <Plug>(GitGutterTextObjectOuterPending)
+xnoremap ih <Plug>(GitGutterTextObjectInnerVisual)
+xnoremap ah <Plug>(GitGutterTextObjectOuterVisual)
 
-"====== advanced text object for blocks delimited by (), {}, [], '', "", <>
-Plug 'kana/vim-textobj-user'  " dependency of vim-textobj-anyblock
+#====== advanced text object for blocks delimited by (), {}, [], '', "", <>
+Plug 'kana/vim-textobj-user'  # dependency of vim-textobj-anyblock
 Plug 'rhysd/vim-textobj-anyblock'
 
-"====== simplify unicode character input and info query ======
+#====== simplify unicode character input and info query ======
 Plug 'chrisbra/unicode.vim'
 
-"====== show indentation level with thin marker for space based indentation ======
-let g:indentLine_char='┊' " or: ╵╷│┆|¦
-if get(hlget("Normal")[0], "ctermbg", 255) == 0
-  let g:indentLine_color_term=235  " For dark background
+#====== show indentation level with thin marker for space based indentation ======
+g:indentLine_char = '┊' # or: ╵╷│┆|¦
+if get(hlget("Normal")[0], "ctermbg", 255) == '0'
+  g:indentLine_color_term = 235  # For dark background
 else
-  let g:indentLine_color_term=254  " For light background
+  g:indentLine_color_term = 254  # For light background
 endif
 
 Plug 'Yggdroot/indentLine'
 
-"====== vim tmux navigator, seamless navigation between vim splits and tmux panes ======
-let g:tmux_navigator_no_mappings = 1
-let g:tmux_navigator_disable_when_zoomed = 1
+#====== vim tmux navigator, seamless navigation between vim splits and tmux panes ======
+g:tmux_navigator_no_mappings = 1
+g:tmux_navigator_disable_when_zoomed = 1
 Plug 'christoomey/vim-tmux-navigator'
 nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
 nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
-"nnoremap <silent> <C-w><C-w> :TmuxNavigatePrevious<cr>
+#nnoremap <silent> <C-w><C-w> :TmuxNavigatePrevious<cr>
 
-"====== fuzzy file/buffer switching ======
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
+#====== fuzzy file/buffer switching ======
+g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
 Plug 'ctrlpvim/ctrlp.vim'
 nnoremap <silent> § :CtrlPBuffer<cr>
 
-"===== Python coverage highlighting ======
+#===== Python coverage highlighting ======
 Plug 'mgedmin/coverage-highlight.vim'
 highlight NoCoverage ctermbg=234
 highlight NoBranchCoverage ctermbg=234
@@ -464,9 +470,9 @@ nnoremap <leader>c :ToggleCoverage<CR>
 nnoremap [c :PrevUncovered<CR>
 nnoremap ]c :NextUncovered<CR>
 
-"====== sandwiched text operation =====
+#====== sandwiched text operation =====
 Plug 'machakann/vim-sandwich'
-let g:sandwich_no_default_key_mappings = 1
+g:sandwich_no_default_key_mappings = 1
 
 nmap za <Plug>(sandwich-add)
 xmap za <Plug>(sandwich-add)
@@ -478,148 +484,150 @@ nmap zr <Plug>(sandwich-replace)
 xmap zr <Plug>(sandwich-replace)
 nmap zrb <Plug>(sandwich-replace-auto)
 
-"===== coc.nvim =====
+#===== coc.nvim =====
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Run the following command to install the extensions:
-" :CocInstall coc-diagnostic coc-jedi coc-json coc-marketplace coc-sh coc-vimlsp
-" Suggested settings
+
+#===== Add plugins to &runtimepath
+plug#end()
+
+#===== Finalize coc config now that runtimepath is updated =====
+import autoload 'coc.vim'
+import autoload 'coc/float.vim'
+import autoload 'coc/pum.vim'
+import autoload 'coc/rpc.vim'
+# Run the following command to install the extensions:
+# :CocInstall coc-diagnostic coc-jedi coc-json coc-marketplace coc-sh coc-vimlsp
+# Suggested settings
 set updatetime=300
 
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-" Insert <tab> when previous text is space, refresh completion if not.
-inoremap <silent><expr> <TAB>
-\ coc#pum#visible() ? coc#pum#next(1):
-\ <SID>check_back_space() ? "\<Tab>" :
-\ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
+# Use tab for trigger completion with characters ahead and navigate.
+# NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+# other plugin before putting this into your config.
+# Insert <tab> when previous text is space, refresh completion if not.
+def Check_back_space(): bool
+  var col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
+enddef
+inoremap <silent><expr> <TAB> <SID>pum.visible() ? <SID>pum.next(1) : Check_back_space() ? "\<Tab>" : <SID>coc.refresh()
+inoremap <expr> <S-TAB> <SID>pum.visible() ? <SID>pum.prev(1) : "\<C-h>"
 
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-@> coc#refresh()
+# Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-@> <SID>coc.refresh()
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-"inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-"                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+# Make <CR> auto-select the first completion item and notify coc.nvim to
+# format on enter, <cr> could be remapped by other vim plugin
+#inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+#                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-let g:pyindent_continue="shiftwidth()"
-let g:pyindent_open_paren="shiftwidth()"
+g:pyindent_continue = "shiftwidth()"
+g:pyindent_open_paren = "shiftwidth()"
 
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+# Use `[g` and `]g` to navigate diagnostics
+# Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
+nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gds :<C-U>call CocActionAsync('jumpDefinition', 'split')<CR>
-nmap <silent> gdv :<C-U>call CocActionAsync('jumpDefinition', 'vsplit')<CR>
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+# GoTo code navigation.
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gds :call g:CocActionAsync('jumpDefinition', 'split')<CR>
+nnoremap <silent> gdv :call g:CocActionAsync('jumpDefinition', 'vsplit')<CR>
+nnoremap <silent> gy <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
 
-" Use K to show documentation in preview window.
-nnoremap <silent> K :call <SID>show_documentation()<CR>
+# Use K to show documentation in preview window.
+nnoremap <silent> K <ScriptCmd>Show_documentation()<CR>
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
+def Show_documentation()
+  if (index(['vim', 'help'], &filetype) >= 0)
+    execute 'h ' .. expand('<cword>')
+  elseif (rpc.ready())
+    g:CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    execute '!' .. &keywordprg .. " " .. expand('<cword>')
   endif
-endfunction
+enddef
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-hi CocHighlightText term=bold cterm=bold
+# Symbol renaming.
+nnoremap <leader>rn <Plug>(coc-rename)
 
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
-
-" Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+# Formatting selected code.
+xnoremap <leader>f  <Plug>(coc-format-selected)
+nnoremap <leader>f  <Plug>(coc-format-selected)
 
 augroup my_coc_group
   autocmd!
-  " Setup formatexpr specified filetype(s).
+
+  # Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * call g:CocActionAsync('highlight')
+  hi CocHighlightText term=bold cterm=bold
+  # Setup formatexpr specified filetype(s).
   autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-  " Update signature help on jump placeholder.
+  # Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+# Applying codeAction to the selected region.
+# Example: `<leader>aap` for current paragraph
+xnoremap <leader>a  <Plug>(coc-codeaction-selected)
+nnoremap <leader>a  <Plug>(coc-codeaction-selected)
 
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
+# Remap keys for applying codeAction to the current buffer.
+nnoremap <leader>ac  <Plug>(coc-codeaction)
+# Apply AutoFix to problem on the current line.
+nnoremap <leader>qf  <Plug>(coc-fix-current)
 
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
+# Map function and class text objects
+# NOTE: Requires 'textDocument.documentSymbol' support from the language server.
+xnoremap if <Plug>(coc-funcobj-i)
+onoremap if <Plug>(coc-funcobj-i)
+xnoremap af <Plug>(coc-funcobj-a)
+onoremap af <Plug>(coc-funcobj-a)
+xnoremap ic <Plug>(coc-classobj-i)
+onoremap ic <Plug>(coc-classobj-i)
+xnoremap ac <Plug>(coc-classobj-a)
+onoremap ac <Plug>(coc-classobj-a)
 
-" Remap <C-f> and <C-b> for scroll float windows/popups.
+# Remap <C-f> and <C-b> for scroll float windows/popups.
 if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-  inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-  vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+  nnoremap <silent><nowait><expr> <C-f> <SID>float.has_scroll() ? <SID>float.scroll(1) : "\<C-f>"
+  nnoremap <silent><nowait><expr> <C-b> <SID>float.has_scroll() ? <SID>float.scroll(0) : "\<C-b>"
+  inoremap <silent><nowait><expr> <C-f> <SID>float.has_scroll() ? "\<c-r>=<SID>float.scroll(1)\<cr>" : "\<Right>"
+  inoremap <silent><nowait><expr> <C-b> <SID>float.has_scroll() ? "\<c-r>=<SID>float.scroll(0)\<cr>" : "\<Left>"
+  vnoremap <silent><nowait><expr> <C-f> <SID>float.has_scroll() ? <SID>float.scroll(1) : "\<C-f>"
+  vnoremap <silent><nowait><expr> <C-b> <SID>float.has_scroll() ? <SID>float.scroll(0) : "\<C-b>"
 endif
 
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of language server.
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
+# Use CTRL-S for selections ranges.
+# Requires 'textDocument/selectionRange' support of language server.
+nnoremap <silent> <C-s> <Plug>(coc-range-select)
+xnoremap <silent> <C-s> <Plug>(coc-range-select)
 
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
+# Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call g:CocAction('format')
 
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+# Add `:Fold` command to fold current buffer.
+command! -nargs=? Fold :call g:CocAction('fold', <f-args>)
 
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+# Add `:OR` command for organize imports of the current buffer.
+command! -nargs=0 OR :call g:CocAction('runCommand', 'editor.action.organizeImport')
 
-" Mappings for CoCList
-" Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
-" Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
-" Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
-" Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
-" Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+# Mappings for CoCList
+# Show all diagnostics.
+nnoremap <silent><nowait> <space>a  <Cmd>CocList diagnostics<cr>
+# Manage extensions.
+nnoremap <silent><nowait> <space>e  <Cmd>CocList extensions<cr>
+# Show commands.
+nnoremap <silent><nowait> <space>c  <Cmd>CocList commands<cr>
+# Find symbol of current document.
+nnoremap <silent><nowait> <space>o  <Cmd>CocList outline<cr>
+# Search workspace symbols.
+nnoremap <silent><nowait> <space>s  <Cmd>CocList -I symbols<cr>
+# Do default action for next item.
+nnoremap <silent><nowait> <space>j  <Cmd>CocNext<CR>
+# Do default action for previous item.
+nnoremap <silent><nowait> <space>k  <Cmd>CocPrev<CR>
+# Resume latest coc list.
+nnoremap <silent><nowait> <space>p  <Cmd>CocListResume<CR>
 
-"===== Add plugins to &runtimepath
-call plug#end()
-
-" vim:ts=2:sw=2
+# vim:ts=2:sw=2
