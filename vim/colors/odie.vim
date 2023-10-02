@@ -83,15 +83,15 @@ hi Statement     gui=NONE cterm=NONE guifg=#ffff5f ctermfg=227 guibg=NONE ctermb
 #hi Todo          gui=NONE cterm=NONE guifg=NONE  guibg=NONE
 #hi Underlined    gui=NONE cterm=NONE guifg=NONE  guibg=NONE
 
-hi SpellBad   cterm=undercurl ctermbg=NONE ctermul=9
-hi SpellLocal cterm=undercurl ctermbg=NONE ctermul=6
+hi SpellBad   gui=undercurl guisp=Red  cterm=undercurl ctermbg=52
+hi SpellLocal gui=undercurl guisp=Cyan cterm=undercurl ctermbg=18
 
 hi ShowMarksHLl gui=NONE cterm=NONE ctermbg=242 ctermfg=0
 hi ShowMarksHLu gui=NONE cterm=NONE ctermbg=242 ctermfg=0
 hi ShowMarksHLo gui=NONE cterm=NONE ctermbg=242 ctermfg=0
 hi ShowMarksHLm gui=NONE cterm=NONE ctermbg=242 ctermfg=15
 
-# 256 color terms use the following base componant values:
+# 256 color terms use the following base component values:
 # 00, 5f, 87, af, d7, ff
 # For the grayscale ramp:
 # 08, 12, 1c, 26, 30, 3a, 44, 4e, 58, 62, 6c, 76, 80, 8a, 94, 9e, a8, b2, bc, c6, d0, da, e4, ee
