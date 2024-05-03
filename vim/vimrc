@@ -465,6 +465,17 @@ nnoremap ]c :NextUncovered<CR>
 
 "====== sandwiched text operation =====
 Plug 'machakann/vim-sandwich'
+let g:sandwich_no_default_key_mappings = 1
+
+nmap za <Plug>(sandwich-add)
+xmap za <Plug>(sandwich-add)
+omap za <Plug>(sandwich-add)
+nmap zd <Plug>(sandwich-delete)
+xmap zd <Plug>(sandwich-delete)
+nmap zdb <Plug>(sandwich-delete-auto)
+nmap zr <Plug>(sandwich-replace)
+xmap zr <Plug>(sandwich-replace)
+nmap zrb <Plug>(sandwich-replace-auto)
 
 "===== coc.nvim =====
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
