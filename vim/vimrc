@@ -81,6 +81,12 @@ else
   set signcolumn=yes
 endif
 
+set t_Us=[4:2m
+set t_Cs=[4:3m
+set t_Ce=[4:0m
+set t_AU=[58;5;%dm
+
+
 "" search improvements
 set incsearch
 set hlsearch  " hide highlighting with :nohls instead of unsetting it

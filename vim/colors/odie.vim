@@ -82,7 +82,8 @@ hi Statement     gui=NONE cterm=NONE guifg=#ffff5f ctermfg=227 guibg=NONE ctermb
 "hi Todo          gui=NONE cterm=NONE guifg=NONE  guibg=NONE
 "hi Underlined    gui=NONE cterm=NONE guifg=NONE  guibg=NONE
 
-hi SpellLocal    gui=undercurl guisp=Cyan cterm=underline ctermbg=6
+hi SpellBad   cterm=undercurl ctermbg=NONE ctermul=9
+hi SpellLocal cterm=undercurl ctermbg=NONE ctermul=6
 
 hi ShowMarksHLl gui=NONE cterm=NONE ctermbg=242 ctermfg=0
 hi ShowMarksHLu gui=NONE cterm=NONE ctermbg=242 ctermfg=0
