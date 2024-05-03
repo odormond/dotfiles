@@ -7,9 +7,6 @@
 #  under the name of all existing modules.
 #
 
-from __future__ import nested_scopes
-
-
 def startup():
     #
     #  Command-line completion
@@ -60,6 +57,7 @@ def startup():
         import imp
         ALL_SUFFIXES = [suffix for suffix, mode, typ in imp.get_suffixes()]
     import os
+    import sys
     import __main__
     if sys.version_info < (3, 0):
         import __builtin__ as builtins
