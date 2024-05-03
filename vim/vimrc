@@ -327,7 +327,8 @@ nnoremap <Leader>tc :TagbarClose<cr>
 au BufEnter __Tagbar__.* nnoremap <buffer> <esc> :wincmd p<cr>
 let g:tagbar_left=1
 let g:tagbar_zoomwidth=0
-let g:tagbar_indent=1
+let g:tagbar_compact=1
+let g:tagbar_indent=2
 let g:tagbar_show_visibility=0
 let g:tagbar_previewwin_pos="belowright"
 Plug 'majutsushi/tagbar'
