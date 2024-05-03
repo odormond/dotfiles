@@ -234,6 +234,12 @@ inoremap <Right> <nop>
 " quick toggle of paste mode
 nmap <Leader>o :set paste!<cr>
 
+" Quickfix shorthand
+nnoremap <Leader>m :make<cr>
+nnoremap <Leader>< :cprev<cr>
+nnoremap <Leader>> :cnext<cr>
+au FileType python set makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
+
 " Block dragging and dupplication
 vmap  <expr>  <Left>   DVB_Drag('left')
 vmap  <expr>  <Right>  DVB_Drag('right')
