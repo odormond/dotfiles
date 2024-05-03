@@ -7,7 +7,7 @@ from pathlib import Path
 SYMLINKS = {
     '.bashrc': 'bash/rc',
     '.bash_aliases': 'bash/aliases',
-    '.bash_aliases_completion': 'bash/aliases_completion',
+    '.bash_completions.d': 'bash/completions.d',
     '.profile': 'bash/profile',
     '.inputrc': 'readline/rc',
     '.gitconfig': 'git/config',
