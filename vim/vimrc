@@ -413,7 +413,7 @@ Plug 'tpope/vim-speeddating'
 Plug 'idanarye/vim-merginal'
 
 "====== change marker with gitgutter ======
-Plug 'airblade/vim-gitgutter'
+Plug 'airblade/vim-gitgutter', { 'branch': 'main' }
 highlight SignColumn ctermbg=NONE guibg=NONE
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
