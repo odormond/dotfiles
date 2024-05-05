@@ -484,9 +484,61 @@ nmap zr <Plug>(sandwich-replace)
 xmap zr <Plug>(sandwich-replace)
 nmap zrb <Plug>(sandwich-replace-auto)
 
+#===== lsp =====
+Plug 'yegappan/lsp'
 
 #===== Add plugins to &runtimepath
 plug#end()
 
+var lspServers = [{
+  \   name: 'bashls',
+  \   filetype: 'sh',
+  \   path: 'bash-language-server',
+  \   args: ['start']
+  \ },
+  \ {
+  \   name: 'ruffls',
+  \   filetype: 'python',
+  \   path: 'ruff-ls',
+  \   args: []
+  \ },
+  \ {
+  \   name: 'jedils',
+  \   filetype: 'python',
+  \   path: 'jedi-language-server',
+  \   args: []
+  \ },
+  \ {
+  \   name: 'vimls',
+  \   filetype: 'vim',
+  \   path: 'vim-language-server',
+  \   args: ['--stdio']
+  \ }]
+autocmd User LspSetup call LspAddServer(lspServers)
+
+var lspOpts = {
+  \   autoHighlight: v:true,
+  \   autoHighlightDiags: v:true,
+  \   showDiagInBalloon: v:false,
+  \   showDiagOnStatusLine: v:false,
+  \ }
+autocmd User LspSetup call LspOptionsSet(lspOpts)
+
+nnoremap <silent> gdg :LspGotoDefinition<CR>
+nnoremap <silent> gdp :LspPeekDefinition<CR>
+nnoremap <silent> gDg :LspGotoTypeDef<CR>
+nnoremap <silent> gDp :LspPeekTypeDef<CR>
+nnoremap <silent> gh :LspHover<CR>
+nnoremap <silent> gr :LspPeekReferences<CR>
+nnoremap <silent> gs :LspSymbolSearch<CR>
+nnoremap <silent> g<SPACE> :LspHighlight<CR>
+nnoremap <silent> g<BS> :LspHighlightClear<CR>
+
+def Check_back_space(): bool
+  var col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+enddef
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : Check_back_space() ? "\<Tab>" : "\<C-x>\<C-o>"
+inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 # vim:ts=2:sw=2
