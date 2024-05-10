@@ -66,7 +66,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033]2;\w\033\\\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\e[01;32m\]\u@\h\[\e[00m\]:\[\e[01;34m\]\w\[\e[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
@@ -80,11 +80,16 @@ fi
 
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1"
-    ;;
-*)
-    ;;
+    xterm*|rxvt*) PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1";;
+esac
+
+# If this is a tmux term set prompt, input and command markers
+case "$TERM" in
+    tmux*)
+        PS0="\[\e]133;C\007\]"
+        PS1="\[\e]133;D;$?\007\e]133;A\007\]${PS1}\[\e]133;I\007\]"
+        PS2="\[\e]133;P\007\]${PS2}\[\e]133;I\007\]"
+        ;;
 esac
 
 export PYTHONSTARTUP=$HOME/.pythonrc.py
