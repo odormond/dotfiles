@@ -83,8 +83,11 @@ hi Statement     gui=NONE cterm=NONE guifg=#ffff5f ctermfg=227 guibg=NONE ctermb
 #hi Todo          gui=NONE cterm=NONE guifg=NONE  guibg=NONE
 #hi Underlined    gui=NONE cterm=NONE guifg=NONE  guibg=NONE
 
-hi SpellBad   gui=undercurl guisp=Red  cterm=undercurl ctermbg=52
-hi SpellLocal gui=undercurl guisp=Cyan cterm=undercurl ctermbg=18
+# Also used for LspDiagInlineError/Hint/Info/Warning respectively
+hi SpellBad   gui=undercurl guisp=Red  cterm=undercurl ctermbg=NONE ctermul=52
+hi SpellLocal gui=undercurl guisp=Cyan cterm=undercurl ctermbg=NONE ctermul=18
+hi SpellRare  gui=undercurl guisp=NONE cterm=undercurl ctermbg=NONE ctermul=22
+hi SpellCap   gui=undercurl guisp=NONE cterm=undercurl ctermbg=NONE ctermul=94
 
 hi ShowMarksHLl gui=NONE cterm=NONE ctermbg=242 ctermfg=0
 hi ShowMarksHLu gui=NONE cterm=NONE ctermbg=242 ctermfg=0
