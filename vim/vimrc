@@ -242,7 +242,6 @@ nnoremap <Leader>o :set paste!<cr>
 nnoremap <Leader>m :make<cr>
 nnoremap <Leader>< :cprev<cr>
 nnoremap <Leader>> :cnext<cr>
-au FileType python set makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
 
 # Block dragging and dupplication
 vnoremap <Left>   <ScriptCmd>g:DVB_Drag('left')<CR>
@@ -548,6 +547,7 @@ enddef
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : Check_back_space() ? "\<Tab>" : "\<C-x>\<C-o>"
 inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+# Python tooling
 def ShowRuffRule(): string
   var diag = lsp#diag#GetDiagByPos(bufnr(), line('.'), charcol('.'), v:true)
   var code = diag['code']
@@ -556,5 +556,13 @@ def ShowRuffRule(): string
   return ""
 enddef
 nnoremap <expr> <leader>r ShowRuffRule()
+
+g:python_indent = {
+  continue: 'shiftwidth()',
+  open_paren: 'shiftwidth()',
+  closed_paren_align_last_line: v:false,
+}
+
+au FileType python set makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
 
 # vim:ts=2:sw=2
