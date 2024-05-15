@@ -84,11 +84,15 @@ else
   set signcolumn=yes
 endif
 
-# Enable advanced styling like double underline and undercurl
-set t_Us=[4:2m
-set t_Cs=[4:3m
-set t_Ce=[4:0m
-set t_AU=[58;5;%dm
+# Enable advanced styling like double / dotted / dashed underline and undercurl
+set t_Us=[4:2m  # double underline
+set t_Cs=[4:3m  # curly underline
+set t_ds=[4:4m  # dotted underline (required Ubuntu 24.04 / libvte 0.76+)
+set t_Ds=[4:5m  # dashed underline (required Ubuntu 24.04 / libvte 0.76+)
+set t_Ce=[4:0m  # end * underline
+set t_AU=[58;5;%dm  # set * underline colour
+set t_Ts=[9m  # strikethrough start
+set t_Te=[29m  # strikethrough end
 
 
 ## search improvements
