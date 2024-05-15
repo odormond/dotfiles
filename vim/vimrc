@@ -490,41 +490,43 @@ Plug 'yegappan/lsp'
 #===== Add plugins to &runtimepath
 plug#end()
 
-var lspServers = [{
-  \   name: 'bashls',
-  \   filetype: 'sh',
-  \   path: 'bash-language-server',
-  \   args: ['start'],
-  \ },
-  \ {
-  \   name: 'ruffls',
-  \   filetype: 'python',
-  \   path: 'ruff-lsp',
-  \   args: [],
-  \   features: {
-  \     hover: v:false,
-  \   },
-  \ },
-  \ {
-  \   name: 'jedils',
-  \   filetype: 'python',
-  \   path: 'jedi-language-server',
-  \   args: [],
-  \ },
-  \ {
-  \   name: 'vimls',
-  \   filetype: 'vim',
-  \   path: 'vim-language-server',
-  \   args: ['--stdio'],
-  \ }]
+var lspServers = [
+  {
+    name: 'bashls',
+    filetype: 'sh',
+    path: 'bash-language-server',
+    args: ['start'],
+  },
+  {
+    name: 'ruffls',
+    filetype: 'python',
+    path: 'ruff-lsp',
+    args: [],
+    features: {
+      hover: v:false,
+    },
+  },
+  {
+    name: 'jedils',
+    filetype: 'python',
+    path: 'jedi-language-server',
+    args: [],
+  },
+  {
+    name: 'vimls',
+    filetype: 'vim',
+    path: 'vim-language-server',
+    args: ['--stdio'],
+  }
+]
 autocmd User LspSetup call LspAddServer(lspServers)
 
 var lspOpts = {
-  \   autoHighlight: v:true,
-  \   autoHighlightDiags: v:true,
-  \   showDiagInPopup: v:false,
-  \   showDiagOnStatusLine: v:true,
-  \ }
+  autoHighlight: v:true,
+  autoHighlightDiags: v:true,
+  showDiagInPopup: v:false,
+  showDiagOnStatusLine: v:true,
+}
 autocmd User LspSetup call LspOptionsSet(lspOpts)
 
 nnoremap <silent> gdg :LspGotoDefinition<CR>
