@@ -64,8 +64,8 @@ hi WildMenu      gui=bold cterm=bold guifg=black ctermfg=16 guibg=#00d7ff ctermb
 #hi Tooltip       gui=NONE  guifg=NONE  guibg=NONE
 hi Folded        gui=NONE cterm=NONE guifg=#00ffff ctermfg=11   guibg=NONE    ctermbg=NONE
 
-hi Pmenu         gui=NONE cterm=NONE guifg=#bcbcbc ctermfg=250  guibg=#1c1c1c ctermbg=234
-hi PmenuSel      gui=bold cterm=bold guifg=#c6c6c6 ctermfg=251  guibg=#262626 ctermbg=235
+hi Pmenu         gui=NONE cterm=NONE guifg=#bcbcbc ctermfg=250  guibg=#1c1c1c ctermbg=235
+hi PmenuSel      gui=bold cterm=bold guifg=#c6c6c6 ctermfg=251  guibg=#262626 ctermbg=237
 hi PmenuSBar     gui=NONE cterm=NONE guifg=NONE    ctermfg=NONE guibg=#000087 ctermbg=18
 hi PmenuThumb    gui=NONE cterm=NONE guifg=#0000ff ctermfg=21   guibg=NONE    ctermbg=NONE
 
