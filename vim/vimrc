@@ -462,8 +462,8 @@ highlight NoCoverage ctermbg=234
 highlight NoBranchCoverage ctermbg=234
 highlight NoBranchCoverageTarget ctermbg=234
 nnoremap <leader>c :ToggleCoverage<CR>
-nnoremap [c :PrevUncovered<CR>
-nnoremap ]c :NextUncovered<CR>
+nnoremap <leader>[ :PrevUncovered<CR>
+nnoremap <leader>] :NextUncovered<CR>
 
 #====== sandwiched text operation =====
 Plug 'machakann/vim-sandwich'
@@ -563,10 +563,52 @@ def ShowRuffRule(): void
   endif
 enddef
 
+def PythonJump(mode: string, motion: string, flags: string, count: number, startofline=true): void
+    if mode == 'x'
+        normal! gv
+    endif
+
+    if startofline
+        normal! 0
+    endif
+
+    mark '
+    var cnt = count
+    while cnt > 0
+        search(motion, flags)
+        cnt = cnt - 1
+    endwhile
+
+    if startofline
+        normal! ^
+    endif
+enddef
+
 def SetupPythonFileType(): void
   setlocal makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
 
   nnoremap <silent><buffer> <leader>r :<C-U>vim9 <SID>ShowRuffRule()<CR>
+  # previous and next function or class
+  nnoremap <silent><buffer> [[ :<C-U>call <SID>PythonJump('n', '\v^\s*<((async )?def\|class)>', 'Wb', v:count1)<CR>
+  onoremap <silent><buffer> [[ :call <SID>PythonJump('n', '\v^\s*<((async )?def\|class)>', 'Wb', v:count1)<CR>
+  xnoremap <silent><buffer> [[ :call <SID>PythonJump('n', '\v^\s*<((async )?def\|class)>', 'Wb', v:count1)<CR>
+  nnoremap <silent><buffer> ]] :<C-U>call <SID>PythonJump('n', '\v^\s*<((async )?def\|class)>', 'W', v:count1)<CR>
+  onoremap <silent><buffer> ]] :call <SID>PythonJump('n', '\v^\s*<((async )?def\|class)>', 'W', v:count1)<CR>
+  xnoremap <silent><buffer> ]] :call <SID>PythonJump('n', '\v^\s*<((async )?def\|class)>', 'W', v:count1)<CR>
+  # previous and next function only
+  nnoremap <silent><buffer> [d :<C-U>call <SID>PythonJump('n', '\v^\s*<(async )?def>', 'Wb', v:count1)<CR>
+  onoremap <silent><buffer> [d :call <SID>PythonJump('n', '\v^\s*<(async )?def>', 'Wb', v:count1)<CR>
+  xnoremap <silent><buffer> [d :call <SID>PythonJump('n', '\v^\s*<(async )?def>', 'Wb', v:count1)<CR>
+  nnoremap <silent><buffer> ]d :<C-U>call <SID>PythonJump('n', '\v^\s*<(async )?def>', 'W', v:count1)<CR>
+  onoremap <silent><buffer> ]d :call <SID>PythonJump('n', '\v^\s*<(async )?def>', 'W', v:count1)<CR>
+  xnoremap <silent><buffer> ]d :call <SID>PythonJump('n', '\v^\s*<(async )?def>', 'W', v:count1)<CR>
+  # previous and next class only
+  nnoremap <silent><buffer> [c :<C-U>call <SID>PythonJump('n', '\v^\s*<class>', 'Wb', v:count1)<CR>
+  onoremap <silent><buffer> [c :call <SID>PythonJump('n', '\v^\s*<class>', 'Wb', v:count1)<CR>
+  xnoremap <silent><buffer> [c :call <SID>PythonJump('n', '\v^\s*<class>', 'Wb', v:count1)<CR>
+  nnoremap <silent><buffer> ]c :<C-U>call <SID>PythonJump('n', '\v^\s*<class>', 'W', v:count1)<CR>
+  onoremap <silent><buffer> ]c :call <SID>PythonJump('n', '\v^\s*<class>', 'W', v:count1)<CR>
+  xnoremap <silent><buffer> ]c :call <SID>PythonJump('n', '\v^\s*<class>', 'W', v:count1)<CR>
 enddef
 
 au FileType python call SetupPythonFileType()
