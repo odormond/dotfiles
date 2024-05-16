@@ -322,14 +322,6 @@ nnoremap <Leader>no :NERDTreeVCS %:h<cr>
 nnoremap <Leader>nc :NERDTreeClose<cr>
 Plug 'preservim/nerdtree'
 
-#====== use the tab key for completion ======
-g:SuperTabDefaultCompletionType = 'context'
-g:SuperTabContextDefaultCompletionType = "<c-n>"
-g:SuperTabLongestEnhanced = 1
-g:SuperTabLongestHighlight = 1
-g:SuperTabCrMapping = 1
-#Plug 'ervandew/supertab'
-
 #====== code structure identification and navigation ======
 nnoremap <Leader>to :TagbarOpen fj<cr>
 nnoremap <Leader>tc :TagbarClose<cr>
