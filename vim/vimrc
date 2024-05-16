@@ -544,19 +544,24 @@ inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : Check_back_space() ? "\<
 inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 # Python tooling
-def ShowRuffRule(): string
-  var diag = lsp#diag#GetDiagByPos(bufnr(), line('.'), charcol('.'), v:true)
-  var code = diag['code']
-  var explanation = system("ruff rule " .. code)
-  echo explanation
-  return ""
-enddef
-
 g:python_indent = {
   continue: 'shiftwidth()',
   open_paren: 'shiftwidth()',
   closed_paren_align_last_line: false,
 }
+
+def ShowRuffRule(): void
+  var diag = lsp#diag#GetDiagByPos(bufnr(), line('.'), charcol('.'))
+  if !diag->empty() && diag->has_key('source') && diag.source == 'Ruff'
+    var code = diag['code']
+    var explanation = systemlist("ruff rule " .. code)
+    popup_atcursor(
+      lsp#markdown#ParseMarkdown(explanation).content, {maxwidth: 80, padding: [0, 1, 0, 1]}
+    )
+  else
+    echo "No ruff diagnostic found"
+  endif
+enddef
 
 def SetupPythonFileType(): void
   setlocal makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
