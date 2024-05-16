@@ -434,7 +434,7 @@ Plug 'chrisbra/unicode.vim'
 #====== show indentation level with thin marker for space based indentation ======
 g:indentLine_char = '┊' # or: ╵╷│┆|¦
 if get(hlget("Normal")[0], "ctermbg", 255) == '0'
-  g:indentLine_color_term = 235  # For dark background
+  g:indentLine_color_term = 237  # For dark background
 else
   g:indentLine_color_term = 254  # For light background
 endif
