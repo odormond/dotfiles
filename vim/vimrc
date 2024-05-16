@@ -254,7 +254,7 @@ vnoremap <Down>   <ScriptCmd>g:DVB_Drag('down')<CR>
 vnoremap <Up>     <ScriptCmd>g:DVB_Drag('up')<CR>
 vnoremap D        <ScriptCmd>g:DVB_Duplicate()<CR>
 # remove any introduced trailing whitespace after moving
-g:DVB_TrimWS = v:true
+g:DVB_TrimWS = true
 
 # Show changes made to the current buffer that are not saved yet.
 command! DiffOrig vert new | set bt=nofile | r \# | 0d_ | diffthis | wincmd p | diffthis
@@ -506,7 +506,7 @@ var lspServers = [
     path: 'ruff-lsp',
     args: [],
     features: {
-      hover: v:false,
+      hover: false,
     },
   },
   {
@@ -525,10 +525,10 @@ var lspServers = [
 autocmd User LspSetup call LspAddServer(lspServers)
 
 var lspOpts = {
-  autoHighlight: v:true,
-  autoHighlightDiags: v:true,
-  showDiagInPopup: v:false,
-  showDiagOnStatusLine: v:true,
+  autoHighlight: true,
+  autoHighlightDiags: true,
+  showDiagInPopup: false,
+  showDiagOnStatusLine: true,
 }
 autocmd User LspSetup call LspOptionsSet(lspOpts)
 
@@ -564,7 +564,7 @@ nnoremap <expr> <leader>r ShowRuffRule()
 g:python_indent = {
   continue: 'shiftwidth()',
   open_paren: 'shiftwidth()',
-  closed_paren_align_last_line: v:false,
+  closed_paren_align_last_line: false,
 }
 
 au FileType python set makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
