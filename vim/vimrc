@@ -347,7 +347,6 @@ g:airline_theme = "odie"
 g:airline_powerline_fonts = 1
 g:airline#extensions#branch#use_vcscommand = 0
 g:airline#extensions#branch#displayed_head_limit = 11
-g:airline#extensions#coc#enabled = 1
 g:airline#extensions#hunks#non_zero_only = 1
 g:airline#extensions#searchcount#enabled = 0
 g:airline#extensions#tagbar#flags = 'f'
@@ -506,6 +505,7 @@ var lspServers = [
     filetype: 'python',
     path: 'jedi-language-server',
     args: [],
+    debug: true,
   },
   {
     name: 'vimls',
@@ -517,10 +517,13 @@ var lspServers = [
 autocmd User LspSetup call LspAddServer(lspServers)
 
 var lspOpts = {
+  #autoComplete: false,
   autoHighlight: true,
   autoHighlightDiags: true,
+  completionMatcher: "fuzzy",
   showDiagInPopup: false,
   showDiagOnStatusLine: true,
+  useBufferCompletion: true,
 }
 autocmd User LspSetup call LspOptionsSet(lspOpts)
 
