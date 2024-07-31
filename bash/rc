@@ -81,6 +81,7 @@ fi
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
     xterm*|rxvt*) PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h:\w\a\]$PS1";;
+    tmux*) PS1="\[\e]2;\w\a\]$PS1";;
 esac
 
 # Set prompt, input and command markers in case terminal support OSC 133
@@ -111,6 +112,9 @@ if [[ "$PS1" != *\]133\;* ]]; then
 	# Note that bash doesn't support the \[ \] markers here.
 	PS0='\e]133;C\e\\\r'"$PS0"
 fi
+
+# Limit expansion of \w and \W to 3 directories
+PROMPT_DIRTRIM=3
 
 export PYTHONSTARTUP=$HOME/.pythonrc.py
 export EDITOR=`which vim`
