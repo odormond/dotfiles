@@ -484,6 +484,30 @@ Plug 'yegappan/lsp'
 #===== Add plugins to &runtimepath
 plug#end()
 
+def JedilsWorkspace(): dict<string>
+  if $VIRTUAL_ENV != ""
+    return {}  # A virtualenv is active so let jedi lsp auto detection do the work
+  endif
+  silent system("python3 -c'import sys; sys.exit(1 if sys.prefix != sys.base_prefix else 0)'")
+  if v:shell_error != 0
+    # The python on PATH is from a virtualenv so let jedi lsp auto detection do the work
+    return {}
+  endif
+  var hatch_status = system("hatch status 2>&1")
+  if matchstr(hatch_status, "\\[Project] - \\(<no project detected>\\)\\@!") != ""
+    # Hatch knows about a project, explicitly tell jedi lsp to use its python
+    silent var hatch_envs = keys(json_decode(system("hatch env show --json")))
+    for venv in ["test", "dev", "default", hatch_envs[0]]
+      if index(hatch_envs, venv) != -1
+        var executable = trim(system("hatch env find " .. venv)) .. "/bin/python"
+        return {environmentPath: executable}
+      endif
+    endfor
+  endif
+  # Fallback to jedi lsp auto detection
+  return {}
+enddef
+
 var lspServers = [
   {
     name: 'bashls',
@@ -494,8 +518,8 @@ var lspServers = [
   {
     name: 'ruffls',
     filetype: 'python',
-    path: 'ruff-lsp',
-    args: [],
+    path: 'ruff',
+    args: ["server"],
     features: {
       hover: false,
     },
@@ -505,6 +529,9 @@ var lspServers = [
     filetype: 'python',
     path: 'jedi-language-server',
     args: [],
+    initializationOptions: {
+      workspace: JedilsWorkspace(),
+    },
     debug: true,
   },
   {
