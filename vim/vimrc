@@ -484,6 +484,17 @@ Plug 'yegappan/lsp'
 #===== Add plugins to &runtimepath
 plug#end()
 
+var lspOpts = {
+  #autoComplete: false,
+  autoHighlight: true,
+  autoHighlightDiags: true,
+  completionMatcher: "fuzzy",
+  showDiagInPopup: false,
+  showDiagOnStatusLine: true,
+  useBufferCompletion: true,
+}
+autocmd User LspSetup call LspOptionsSet(lspOpts)
+
 def JedilsWorkspace(): dict<string>
   if $VIRTUAL_ENV != ""
     return {}  # A virtualenv is active so let jedi lsp auto detection do the work
@@ -539,20 +550,9 @@ var lspServers = [
     filetype: 'vim',
     path: 'vim-language-server',
     args: ['--stdio'],
-  }
+  },
 ]
 autocmd User LspSetup call LspAddServer(lspServers)
-
-var lspOpts = {
-  #autoComplete: false,
-  autoHighlight: true,
-  autoHighlightDiags: true,
-  completionMatcher: "fuzzy",
-  showDiagInPopup: false,
-  showDiagOnStatusLine: true,
-  useBufferCompletion: true,
-}
-autocmd User LspSetup call LspOptionsSet(lspOpts)
 
 nnoremap <silent> gdg :LspGotoDefinition<CR>
 nnoremap <silent> gdp :LspPeekDefinition<CR>
