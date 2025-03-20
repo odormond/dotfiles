@@ -398,6 +398,8 @@ enddef
 command Gg Git_graph()
 #syn match gitGraphLine /[*|]/
 
+autocmd User BufReadPost */COMMIT_EDITMSG normal gg0
+
 #====== git branch viewer for fugitive ======
 Plug 'rbong/vim-flog'
 
