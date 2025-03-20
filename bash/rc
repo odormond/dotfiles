@@ -163,4 +163,3 @@ fi
 for completion in ~/.bash_completions.d/*; do
     . $completion
 done
-
