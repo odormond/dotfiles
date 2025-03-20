@@ -511,6 +511,13 @@ def JedilsWorkspace(): dict<string>
     # The python on PATH is from a virtualenv so let jedi lsp auto detection do the work
     return {}
   endif
+  var dot_venv = finddir(".venv", "**0;")  # Black magic: search only current directory and all parents
+  if dot_venv != ""
+    var executable = glob(dot_venv .. "/bin/python")
+    if executable != ""
+      return {environmentPath: executable}
+    endif
+  endif
   var hatch_status = system("hatch status 2>&1")
   if matchstr(hatch_status, "\\[Project] - \\(<no project detected>\\)\\@!") != ""
     # Hatch knows about a project, explicitly tell jedi lsp to use its python
