@@ -312,6 +312,11 @@ if has('osxdarwin')
   py3 import os, sys; sys.executable = os.path.join(sys.prefix, 'bin', 'python{}.{}'.format(*sys.version_info[:2]))
 endif
 
+# Load optional builtin packages
+packadd! comment
+packadd! helptoc
+packadd! matchit
+
 # Specify a directory for plugins
 plug#begin('~/.vim/plugged')
 
