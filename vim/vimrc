@@ -20,7 +20,7 @@ set cryptmethod=blowfish2
 
 # Easier to reach <Leader>
 g:mapleader = ","
-g:maplocalleader = g:mapleader # Same char for buffer local leader
+g:maplocalleader = " "
 
 # Editing
 set hidden
@@ -556,16 +556,14 @@ var lspServers = [
 ]
 autocmd User LspSetup call LspAddServer(lspServers)
 
-nnoremap <silent> gdg :LspGotoDefinition<CR>
-nnoremap <silent> gdp :LspPeekDefinition<CR>
-nnoremap <silent> gDg :LspGotoTypeDef<CR>
-nnoremap <silent> gDp :LspPeekTypeDef<CR>
-nnoremap <silent> gr :LspPeekReferences<CR>
-nnoremap <silent> gs :LspSymbolSearch<CR>
-nnoremap <silent> g<SPACE> :LspHighlight<CR>
-nnoremap <silent> g<BS> :LspHighlightClear<CR>
-nnoremap <silent> <leader>a :LspCodeAction<CR>
-nnoremap <silent> <leader>s :LspShowSignature<CR>
+nnoremap <silent> <localleader>di :LspGotoDefinition<CR>
+nnoremap <silent> <localleader>dv :vertical LspGotoDefinition<CR>
+nnoremap <silent> <localleader>dh :horizontal LspGotoDefinition<CR>
+nnoremap <silent> <localleader>sd :LspPeekDefinition<CR>
+nnoremap <silent> <localleader>sr :LspPeekReferences<CR>
+nnoremap <silent> <localleader>ss :LspShowSignature<CR>
+nnoremap <silent> <localleader><BS> :LspHighlightClear<CR>
+nnoremap <silent> <localleader>a :LspCodeAction<CR>
 nnoremap <silent> K :LspHover<CR>
 
 def CheckBackSpace(): bool
