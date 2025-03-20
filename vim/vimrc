@@ -566,11 +566,11 @@ nnoremap <silent> <leader>a :LspCodeAction<CR>
 nnoremap <silent> <leader>s :LspShowSignature<CR>
 nnoremap <silent> K :LspHover<CR>
 
-def Check_back_space(): bool
+def CheckBackSpace(): bool
   var col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 enddef
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : Check_back_space() ? "\<Tab>" : "\<C-x>\<C-o>"
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : CheckBackSpace() ? "\<Tab>" : "\<C-x>\<C-o>"
 inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 # Python tooling
