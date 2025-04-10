@@ -630,7 +630,7 @@ def PythonJump(mode: string, motion: string, flags: string, count: number, start
 enddef
 
 def SetupPythonFileType(): void
-  setlocal makeprg=ruff\ --config\ ~/.ruff.toml\ --fix\ %
+  setlocal makeprg=ruff\ check\ --output-format\ concise\ --config\ ~/.ruff.toml\ --fix\ %
 
   nnoremap <silent><buffer> <leader>r :<C-U>vim9 <SID>ShowRuffRule()<CR>
   # previous and next function or class
