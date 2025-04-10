@@ -12,16 +12,21 @@ gf                  Edit file whose name is under the cursor in a vertical split
 Git
 ,b<motion>          Replace <motion> with current git branch name
 
-Jedi
-,d                  Go to Definition
-,g                  Go to Assignment
-,u                  Show usages of name
-,r                  Rename variables
-K                   Show pydoc documentation
+LSP
+<space>d            Go to definition
+<space>dv           Go to definition in vertical split
+<space>dh           Go to definition in horizontal split
+<space>i            Go to implementation
+<space>iv           Go to implementation in vertical split
+<space>ih           Go to implementation in horizontal split
+<space>sd           Show definition in popup
+<space>si           Show implementation in popup
+<space>sr           Show references in popup
+<space>ss           Show signature
+<space><BS>         Clear highlight
+<space>a            Select LSP code action to execute
+K                   Show documentation
 :Pyimport <name>    Open the file that would be used when doing "import <name>"
-
-Magit
-,M                  Show Magit in a new vertical split
 
 NERDTree
 ,no                 Open NERDTree at VCS root of current file and jump to it

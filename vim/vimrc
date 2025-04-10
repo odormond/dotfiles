@@ -557,7 +557,6 @@ var lspServers = [
     initializationOptions: {
       workspace: JedilsWorkspace(),
     },
-    debug: true,
   },
   {
     name: 'vimls',
@@ -568,10 +567,14 @@ var lspServers = [
 ]
 autocmd User LspSetup call LspAddServer(lspServers)
 
-nnoremap <silent> <localleader>di :LspGotoDefinition<CR>
+nnoremap <silent> <localleader>d :LspGotoDefinition<CR>
 nnoremap <silent> <localleader>dv :vertical LspGotoDefinition<CR>
 nnoremap <silent> <localleader>dh :horizontal LspGotoDefinition<CR>
+nnoremap <silent> <localleader>i :LspGotoImpl<CR>
+nnoremap <silent> <localleader>iv :vertical LspGotoImpl<CR>
+nnoremap <silent> <localleader>ih :horizontal LspGotoImpl<CR>
 nnoremap <silent> <localleader>sd :LspPeekDefinition<CR>
+nnoremap <silent> <localleader>si :LspPeekImpl<CR>
 nnoremap <silent> <localleader>sr :LspPeekReferences<CR>
 nnoremap <silent> <localleader>ss :LspShowSignature<CR>
 nnoremap <silent> <localleader><BS> :LspHighlightClear<CR>
