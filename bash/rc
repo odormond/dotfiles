@@ -87,30 +87,30 @@ esac
 # Set prompt, input and command markers in case terminal support OSC 133
 # Taken from https://gitlab.gnome.org/GNOME/vte/-/blob/master/src/vte.sh.in
 if [[ "$PS1" != *\]133\;* ]]; then
-	# Enclose the primary prompt between
-	# ← OSC 133;D;retval ST (report exit status of previous command)
-	# ← OSC 133;A ST (mark beginning of prompt)
-	# → OSC 133;B ST (mark end of prompt, beginning of command line)
-	PS1='\[\e]133;D;$?\e\\\e]133;A\e\\\]'"$PS1"'\[\e]133;B\e\\\]'
+    # Enclose the primary prompt between
+    # ← OSC 133;D;retval ST (report exit status of previous command)
+    # ← OSC 133;A ST (mark beginning of prompt)
+    # → OSC 133;B ST (mark end of prompt, beginning of command line)
+    PS1='\[\e]133;D;$?\e\\\e]133;A\e\\\]'"$PS1"'\[\e]133;B\e\\\]'
 
-	# Prepend OSC 133;L ST for a conditional newline if the previous
-	# command's output didn't end in one.
-	# This is not done here by default, in order to provide the default
-	# visual behavior of shells. Uncomment if you want this feature.
-	#PS1='\[\e]133;L\e\\\]'"$PS1"
+    # Prepend OSC 133;L ST for a conditional newline if the previous
+    # command's output didn't end in one.
+    # This is not done here by default, in order to provide the default
+    # visual behavior of shells. Uncomment if you want this feature.
+    #PS1='\[\e]133;L\e\\\]'"$PS1"
 
-	# iTerm2 doesn't touch the secondary prompt.
-	# Konsole encloses it between 133;A and 133;B.
-	# For efficient jumping between commands, we follow iTerm2 by default
-	# and don't mark PS2 as prompt. Uncomment if you want to mark it.
-	#PS2='\[\e]133;A\e\\\]'"$PS2"'\[\e]133;B\e\\\]'
+    # iTerm2 doesn't touch the secondary prompt.
+    # Konsole encloses it between 133;A and 133;B.
+    # For efficient jumping between commands, we follow iTerm2 by default
+    # and don't mark PS2 as prompt. Uncomment if you want to mark it.
+    #PS2='\[\e]133;A\e\\\]'"$PS2"'\[\e]133;B\e\\\]'
 
-	# Mark the beginning of the command's output by OSC 133;C ST.
-	# '\r' ensures that the kernel's cooked mode has the right idea of
-	# the column, important for handling TAB followed by BS keypresses.
-	# Prepend to the user's PS0 to preserve whether it ends in '\r'.
-	# Note that bash doesn't support the \[ \] markers here.
-	PS0='\e]133;C\e\\\r'"$PS0"
+    # Mark the beginning of the command's output by OSC 133;C ST.
+    # '\r' ensures that the kernel's cooked mode has the right idea of
+    # the column, important for handling TAB followed by BS keypresses.
+    # Prepend to the user's PS0 to preserve whether it ends in '\r'.
+    # Note that bash doesn't support the \[ \] markers here.
+    PS0='\e]133;C\e\\\r'"$PS0"
 fi
 
 # Limit expansion of \w and \W to 3 directories
