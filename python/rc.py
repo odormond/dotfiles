@@ -59,10 +59,7 @@ def startup():
     import os
     import sys
     import __main__
-    if sys.version_info < (3, 0):
-        import __builtin__ as builtins
-    else:
-        import builtins
+    import builtins
 
     def loadmodule(self):
         import __main__
@@ -75,49 +72,28 @@ def startup():
             __main__.__dict__[name] = m
         return m
 
-    if sys.version_info < (2, 2):
+    class ModuleLoader(type(__main__)):
+        __slots__ = []
 
-        class ModuleLoader:
-            def __init__(self, m):
-                self.__dict__['__name__'] = m
+        def __init__(self, name):
+            super(ModuleLoader, self).__init__(name)
+            d = super(ModuleLoader, self).__getattribute__('__dict__')
+            d['__name__'] = name
 
-            def __repr__(self):
-                return '<module %r (auto-load)>' % self.__name__
+        def __repr__(self):
+            return '<module %r (auto-load)>' % self.__name__
 
-            def __getattr__(self, attr):
-                return getattr(self.__load__(), attr)
-
-            def __setattr__(self, attr, value):
-                setattr(self.__load__(), attr, value)
-
-            def __delattr__(self, attr):
-                delattr(self.__load__(), attr)
-        ModuleLoader.__load__ = loadmodule
-
-    else:
-
-        class ModuleLoader(type(__main__)):
-            __slots__ = []
-
-            def __init__(self, name):
-                super(ModuleLoader, self).__init__(name)
+        def __getattribute__(self, attr):
+            if attr == '__name__':
                 d = super(ModuleLoader, self).__getattribute__('__dict__')
-                d['__name__'] = name
+                return d['__name__']
+            return getattr(loadmodule(self), attr)
 
-            def __repr__(self):
-                return '<module %r (auto-load)>' % self.__name__
+        def __setattr__(self, attr, value):
+            setattr(loadmodule(self), attr, value)
 
-            def __getattribute__(self, attr):
-                if attr == '__name__':
-                    d = super(ModuleLoader, self).__getattribute__('__dict__')
-                    return d['__name__']
-                return getattr(loadmodule(self), attr)
-
-            def __setattr__(self, attr, value):
-                setattr(loadmodule(self), attr, value)
-
-            def __delattr__(self, attr):
-                delattr(loadmodule(self), attr)
+        def __delattr__(self, attr):
+            delattr(loadmodule(self), attr)
 
     modules = list(sys.builtin_module_names)
     for path in sys.path:
@@ -127,10 +103,14 @@ def startup():
             except OSError:
                 continue
             for fn in dirlist:
-                for suf in ALL_SUFFIXES:
-                    if fn.endswith(suf):
-                        modules.append(fn[:-len(suf)])
-                        break
+                fp = os.path.join(path, fn)
+                if os.path.isfile(fp):
+                    for suf in ALL_SUFFIXES:
+                        if fn.endswith(suf):
+                            modules.append(fn[:-len(suf)])
+                            break
+                elif os.path.exists(os.path.join(fp, "__init__.py")):
+                    modules.append(fn)
     d = __main__.__dict__
     d2 = builtins.__dict__
     for m in modules:
