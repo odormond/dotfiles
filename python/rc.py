@@ -20,32 +20,28 @@ def startup():
         import sys
         import os
         import atexit
-        if 'libedit' in readline.__doc__:
-            readline.parse_and_bind("bind ^I rl_complete")
-            readline.parse_and_bind("bind ^R em-inc-search-prev")
-            readline.parse_and_bind("bind ^S em-inc-search-next")
-            readline.parse_and_bind("bind ^[[A ed-search-prev-history")
-            readline.parse_and_bind("bind ^[[B ed-search-next-history")
-        else:
+        editline = 'libedit' in readline.__doc__
+        if not editline:
             readline.parse_and_bind("tab: complete")
-            # readline.parse_and_bind("\e[A: history-search-backward")
-            # readline.parse_and_bind("\e[B: history-search-forward")
-        histfile = os.path.join(os.environ["HOME"], ".pyhist")
+        histfile = os.path.join(os.environ["HOME"], ".python_history")
         try:
             readline.read_history_file(histfile)
-        except IOError:
-            pass
+            prev_hist_len = readline.get_current_history_length()
+        except FileNotFoundError:
+            open(histfile, "wb").close()
+            prev_hist_len = 0
         readline.set_history_length(1000)
 
-        def save_history(filename):
-            history = [readline.get_history_item(i) for i in range(1, readline.get_current_history_length()+1)]
-            readline.clear_history()
-            for line in history:
-                if line.startswith('hashpass'):
-                    line = 'hashpass(...)'
-                readline.add_history(line)
-            return readline.write_history_file(filename)
-        atexit.register(save_history, histfile)
+        def save_history():
+            hist_len = readline.get_current_history_length()
+            pruned_cnt = 0
+            for hist_index in range(hist_len, prev_hist_len, -1):
+                line = readline.get_history_item(hist_index)  # one-based
+                if line.startswith("hashpass("):
+                    pruned_cnt += 1
+                    readline.remove_history_item(hist_index - 1)  # zero-based, unlike get_history_item
+            return readline.append_history_file(hist_len - prev_hist_len - pruned_cnt, histfile)
+        atexit.register(save_history)
 
     #
     #  Module auto-loader
