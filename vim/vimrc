@@ -515,7 +515,7 @@ def JedilsWorkspace(): dict<string>
   if dot_venv != ""
     var executable = glob(dot_venv .. "/bin/python")
     if executable != ""
-      return {environmentPath: executable}
+      return {environmentPath: dot_venv}
     endif
   endif
   var hatch_status = system("hatch status 2>&1")
@@ -524,8 +524,11 @@ def JedilsWorkspace(): dict<string>
     silent var hatch_envs = keys(json_decode(system("hatch env show --json")))
     for venv in ["test", "dev", "default", hatch_envs[0]]
       if index(hatch_envs, venv) != -1
-        var executable = trim(system("hatch env find " .. venv)) .. "/bin/python"
-        return {environmentPath: executable}
+        var env_path = trim(system("hatch env find " .. venv))
+        var executable = glob(env_path .. "/bin/python")
+        if executable != ""
+          return {environmentPath: env_path}
+        endif
       endif
     endfor
   endif
