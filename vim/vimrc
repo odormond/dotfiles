@@ -136,7 +136,7 @@ nnoremap gf :vertical wincmd f<CR>
 nnoremap <BS> <C-^>
 
 #set list
-set listchars=eol:↵,tab:⇥\ ,trail:⏘,extends:⇢,precedes:⇠,conceal:\ ,nbsp:⏙
+set listchars=space:␣,eol:↵,tab:⇥\ ,trail:␣,extends:⇢,precedes:⇠,conceal:\ ,nbsp:⏙
 #set showbreak=↪ # For consistency with list mode but useless due to numberline
 set ttyfast # should always be true nowadays
 #set lazyredraw
