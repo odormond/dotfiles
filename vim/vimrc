@@ -485,6 +485,9 @@ nmap zr <Plug>(sandwich-replace)
 xmap zr <Plug>(sandwich-replace)
 nmap zrb <Plug>(sandwich-replace-auto)
 
+#===== peek at registers =====
+Plug 'junegunn/vim-peekaboo'
+
 #===== lsp =====
 Plug 'yegappan/lsp'
 
