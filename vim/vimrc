@@ -518,7 +518,9 @@ def JedilsWorkspace(): dict<string>
   if dot_venv != ""
     var executable = glob(dot_venv .. "/bin/python")
     if executable != ""
-      return {environmentPath: dot_venv}
+      # Prepend venv bin dir to PATH and let jedi lsp auto detection do the work
+      $PATH = dot_venv .. "/bin:" .. $PATH
+      return {}
     endif
   endif
   var hatch_status = system("hatch status 2>&1")
@@ -530,7 +532,9 @@ def JedilsWorkspace(): dict<string>
         var env_path = trim(system("hatch env find " .. venv))
         var executable = glob(env_path .. "/bin/python")
         if executable != ""
-          return {environmentPath: env_path}
+          # Prepend venv bin dir to PATH and let jedi lsp auto detection do the work
+          $PATH = env_path .. "/bin:" .. $PATH
+          return {}
         endif
       endif
     endfor
