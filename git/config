@@ -12,16 +12,18 @@
     # restack = "!f(){ git checkout ${2:-HEAD} && branches=$(git rev-list ${1:-master}..HEAD^ | git name-rev --annotate-stdin --name-only | cat -n | awk '$0 !~ /~/ {print \"git branch -f \" $2 \" HEAD~\" $1}') && git rebase ${1:-master} && eval \"$branches\"; };f"
     restack = rebase --update-refs
 [push]
-    default = simple
     default = current
+    autoSetupRemote = true
+    useForceIfIncludes = true
 [rebase]
     autosquash = true
     updateRefs = true
 [fetch]
     prune = true
+[status]
+    showStash = true
 [include]
     path = ~/.dotfiles/git/local
-
 [filter "lfs"]
     process = git-lfs filter-process
     required = true
