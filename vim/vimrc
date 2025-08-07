@@ -505,14 +505,14 @@ var lspOpts = {
 }
 autocmd vimrc User LspSetup call LspOptionsSet(lspOpts)
 
-def JedilsWorkspace(): dict<string>
+def AutoVenv()
   if $VIRTUAL_ENV != ""
-    return {}  # A virtualenv is active so let jedi lsp auto detection do the work
+    return # A virtualenv is active so nothing to do
   endif
-  silent system("python3 -c'import sys; sys.exit(1 if sys.prefix != sys.base_prefix else 0)'")
-  if v:shell_error != 0
-    # The python on PATH is from a virtualenv so let jedi lsp auto detection do the work
-    return {}
+  $VIRTUAL_ENV = trim(system("python3 -c'import sys; print(sys.prefix) if sys.prefix != sys.base_prefix else sys.exit(1)'"))
+  if v:shell_error == 0
+    # The python on PATH is from a virtualenv so we're now good to go
+    return
   endif
   var dot_venv = finddir(".venv", "**0;")  # Black magic: search only current directory and all parents
   if dot_venv != ""
@@ -520,7 +520,8 @@ def JedilsWorkspace(): dict<string>
     if executable != ""
       # Prepend venv bin dir to PATH and let jedi lsp auto detection do the work
       $PATH = dot_venv .. "/bin:" .. $PATH
-      return {}
+      $VIRTUAL_ENV = dot_venv
+      return
     endif
   endif
   var hatch_status = system("hatch status 2>&1")
@@ -534,14 +535,17 @@ def JedilsWorkspace(): dict<string>
         if executable != ""
           # Prepend venv bin dir to PATH and let jedi lsp auto detection do the work
           $PATH = env_path .. "/bin:" .. $PATH
-          return {}
+          $VIRTUAL_ENV = env_path
+          return
         endif
       endif
     endfor
   endif
   # Fallback to jedi lsp auto detection
-  return {}
+  return
 enddef
+
+autocmd vimrc FileType python ++once call AutoVenv()
 
 var lspServers = [
   {
@@ -564,9 +568,6 @@ var lspServers = [
     filetype: 'python',
     path: 'jedi-language-server',
     args: [],
-    initializationOptions: {
-      workspace: JedilsWorkspace(),
-    },
   },
   {
     name: 'vimls',
