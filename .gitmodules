@@ -1,0 +1,66 @@
+[submodule "vim/pack/vim-airline/start/vim-airline"]
+	path = vim/pack/vim-airline/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule "vim/pack/tpope/start/vim-repeat"]
+	path = vim/pack/tpope/start/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "vim/pack/dhruvasagar/start/vim-zoom"]
+	path = vim/pack/dhruvasagar/start/vim-zoom
+	url = https://github.com/dhruvasagar/vim-zoom.git
+[submodule "vim/pack/majutsushi/start/tagbar"]
+	path = vim/pack/majutsushi/start/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "vim/pack/wesQ3/start/vim-windowswap"]
+	path = vim/pack/wesQ3/start/vim-windowswap
+	url = https://github.com/wesQ3/vim-windowswap.git
+[submodule "vim/pack/tpope/start/vim-unimpaired"]
+	path = vim/pack/tpope/start/vim-unimpaired
+	url = https://github.com/tpope/vim-unimpaired.git
+[submodule "vim/pack/tpope/start/vim-fugitive"]
+	path = vim/pack/tpope/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/pack/rbong/start/vim-flog"]
+	path = vim/pack/rbong/start/vim-flog
+	url = https://github.com/rbong/vim-flog.git
+[submodule "vim/pack/tpope/start/vim-commentary"]
+	path = vim/pack/tpope/start/vim-commentary
+	url = https://github.com/tpope/vim-commentary
+[submodule "vim/pack/tpope/start/vim-tbone"]
+	path = vim/pack/tpope/start/vim-tbone
+	url = https://github.com/tpope/vim-tbone
+[submodule "vim/pack/tpope/start/vim-speeddating"]
+	path = vim/pack/tpope/start/vim-speeddating
+	url = https://github.com/tpope/vim-speeddating
+[submodule "vim/pack/idanarye/start/vim-merginal"]
+	path = vim/pack/idanarye/start/vim-merginal
+	url = https://github.com/idanarye/vim-merginal
+[submodule "vim/pack/airblade/start/vim-gitgutter"]
+	path = vim/pack/airblade/start/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter
+[submodule "vim/pack/kana/start/vim-textobj-user"]
+	path = vim/pack/kana/start/vim-textobj-user
+	url = https://github.com/kana/vim-textobj-user
+[submodule "vim/pack/rhysd/start/vim-textobj-anyblock"]
+	path = vim/pack/rhysd/start/vim-textobj-anyblock
+	url = https://github.com/rhysd/vim-textobj-anyblock
+[submodule "vim/pack/Yggdroot/start/indentLine"]
+	path = vim/pack/Yggdroot/start/indentLine
+	url = https://github.com/Yggdroot/indentLine
+[submodule "vim/pack/christoomey/start/vim-tmux-navigator"]
+	path = vim/pack/christoomey/start/vim-tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator
+[submodule "vim/pack/ctrlpvim/start/ctrlp.vim"]
+	path = vim/pack/ctrlpvim/start/ctrlp.vim
+	url = https://github.com/ctrlpvim/ctrlp.vim
+[submodule "vim/pack/mgedmin/start/coverage-highlight"]
+	path = vim/pack/mgedmin/start/coverage-highlight
+	url = https://github.com/mgedmin/coverage-highlight.vim
+[submodule "vim/pack/machakann/start/vim-sandwich"]
+	path = vim/pack/machakann/start/vim-sandwich
+	url = https://github.com/machakann/vim-sandwich
+[submodule "vim/pack/junegunn/start/vim-peekaboo"]
+	path = vim/pack/junegunn/start/vim-peekaboo
+	url = https://github.com/junegunn/vim-peekaboo
+[submodule "vim/pack/yegappan/start/lsp"]
+	path = vim/pack/yegappan/start/lsp
+	url = https://github.com/yegappan/lsp

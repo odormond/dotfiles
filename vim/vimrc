@@ -318,14 +318,14 @@ packadd! helptoc
 packadd! matchit
 
 # Specify a directory for plugins
-plug#begin('~/.vim/plugged')
+#plug#begin('~/.vim/plugged')
 
 #====== use NERDtree instead of netrw ======
-g:loaded_netrw = 1
-g:loaded_netrwPlugin = 1
-nnoremap <Leader>no :NERDTreeVCS %:h<cr>
-nnoremap <Leader>nc :NERDTreeClose<cr>
-Plug 'preservim/nerdtree'
+#g:loaded_netrw = 1
+#g:loaded_netrwPlugin = 1
+#nnoremap <Leader>no :NERDTreeVCS %:h<cr>
+#nnoremap <Leader>nc :NERDTreeClose<cr>
+#Plug 'preservim/nerdtree'
 
 #====== code structure identification and navigation ======
 nnoremap <Leader>to :TagbarOpen fj<cr>
@@ -337,14 +337,14 @@ g:tagbar_compact = 1
 g:tagbar_indent = 2
 g:tagbar_show_visibility = 0
 g:tagbar_previewwin_pos = "belowright"
-Plug 'majutsushi/tagbar'
+#Plug 'majutsushi/tagbar'
 
 #====== Window zooming ======
 nnoremap <Leader>z <Plug>(zoom-toggle)
-Plug 'dhruvasagar/vim-zoom'
+#Plug 'dhruvasagar/vim-zoom'
 
 #====== Window swaping ======
-Plug 'wesQ3/vim-windowswap'
+#Plug 'wesQ3/vim-windowswap'
 
 #====== Fancy status line with airline =====
 set laststatus=2
@@ -363,16 +363,16 @@ def Setup_airline()
   g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%3v [%{winnr()}]'])
 enddef
 autocmd User AirlineAfterInit Setup_airline()
-Plug 'vim-airline/vim-airline'
+#Plug 'vim-airline/vim-airline'
 
 #====== make . support some more plugin mapping ======
-Plug 'tpope/vim-repeat'
+#Plug 'tpope/vim-repeat'
 
 #====== square brackets shortcuts for paired commands ======
-Plug 'tpope/vim-unimpaired'
+#Plug 'tpope/vim-unimpaired'
 
 #====== hunk managment with fugitive ======
-Plug 'tpope/vim-fugitive'
+#Plug 'tpope/vim-fugitive'
 def Git_graph()
   var buf_nr = bufadd("git graph")
   var win_nr = bufwinnr(buf_nr)
@@ -406,22 +406,22 @@ command Gg Git_graph()
 autocmd User BufReadPost */COMMIT_EDITMSG normal gg0
 
 #====== git branch viewer for fugitive ======
-Plug 'rbong/vim-flog'
+#Plug 'rbong/vim-flog'
 
 #====== (un)comment stuff out ======
-Plug 'tpope/vim-commentary'
+#Plug 'tpope/vim-commentary'
 
 #====== direct interaction with tmux, particularly buffers ======
-Plug 'tpope/vim-tbone'
+#Plug 'tpope/vim-tbone'
 
 #====== increment/decrement date, time, ... and not just numbers ======
-Plug 'tpope/vim-speeddating'
+#Plug 'tpope/vim-speeddating'
 
 #====== extend fugitive with a nice TUI to manage branches ======
-Plug 'idanarye/vim-merginal'
+#Plug 'idanarye/vim-merginal'
 
 #====== change marker with gitgutter ======
-Plug 'airblade/vim-gitgutter', { 'branch': 'main' }
+#Plug 'airblade/vim-gitgutter', { 'branch': 'main' }
 highlight SignColumn ctermbg=NONE guibg=NONE
 nnoremap ]h <Plug>(GitGutterNextHunk)
 nnoremap [h <Plug>(GitGutterPrevHunk)
@@ -431,11 +431,11 @@ xnoremap ih <Plug>(GitGutterTextObjectInnerVisual)
 xnoremap ah <Plug>(GitGutterTextObjectOuterVisual)
 
 #====== advanced text object for blocks delimited by (), {}, [], '', "", <>
-Plug 'kana/vim-textobj-user'  # dependency of vim-textobj-anyblock
-Plug 'rhysd/vim-textobj-anyblock'
+#Plug 'kana/vim-textobj-user'  # dependency of vim-textobj-anyblock
+#Plug 'rhysd/vim-textobj-anyblock'
 
 #====== simplify unicode character input and info query ======
-Plug 'chrisbra/unicode.vim'
+#Plug 'chrisbra/unicode.vim'
 
 #====== show indentation level with thin marker for space based indentation ======
 g:indentLine_char = '┊' # or: ╵╷│┆|¦
@@ -445,12 +445,12 @@ else
   g:indentLine_color_term = 254  # For light background
 endif
 
-Plug 'Yggdroot/indentLine'
+#Plug 'Yggdroot/indentLine'
 
 #====== vim tmux navigator, seamless navigation between vim splits and tmux panes ======
 g:tmux_navigator_no_mappings = 1
 g:tmux_navigator_disable_when_zoomed = 1
-Plug 'christoomey/vim-tmux-navigator'
+#Plug 'christoomey/vim-tmux-navigator'
 nnoremap <silent> <C-h> :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-j> :TmuxNavigateDown<cr>
 nnoremap <silent> <C-k> :TmuxNavigateUp<cr>
@@ -459,11 +459,11 @@ nnoremap <silent> <C-l> :TmuxNavigateRight<cr>
 
 #====== fuzzy file/buffer switching ======
 g:ctrlp_match_window = 'bottom,order:btt,min:1,max:20,results:20'
-Plug 'ctrlpvim/ctrlp.vim'
+#Plug 'ctrlpvim/ctrlp.vim'
 nnoremap <silent> § :CtrlPBuffer<cr>
 
 #===== Python coverage highlighting ======
-Plug 'mgedmin/coverage-highlight.vim'
+#Plug 'mgedmin/coverage-highlight.vim'
 highlight NoCoverage ctermbg=234
 highlight NoBranchCoverage ctermbg=234
 highlight NoBranchCoverageTarget ctermbg=234
@@ -472,7 +472,7 @@ nnoremap <leader>[ :PrevUncovered<CR>
 nnoremap <leader>] :NextUncovered<CR>
 
 #====== sandwiched text operation =====
-Plug 'machakann/vim-sandwich'
+#Plug 'machakann/vim-sandwich'
 g:sandwich_no_default_key_mappings = 1
 
 nmap za <Plug>(sandwich-add)
@@ -486,13 +486,13 @@ xmap zr <Plug>(sandwich-replace)
 nmap zrb <Plug>(sandwich-replace-auto)
 
 #===== peek at registers =====
-Plug 'junegunn/vim-peekaboo'
+#Plug 'junegunn/vim-peekaboo'
 
 #===== lsp =====
-Plug 'yegappan/lsp'
+#Plug 'yegappan/lsp'
 
 #===== Add plugins to &runtimepath
-plug#end()
+#plug#end()
 
 var lspOpts = {
   #autoComplete: false,
