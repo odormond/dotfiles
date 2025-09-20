@@ -2,7 +2,9 @@ vim9script
 set runtimepath+=/Users/odie/Devel/python/vpdb
 
 # Environment
-set nocompatible
+if &compatible
+  set nocompatible
+endif
 scriptencoding utf-8
 set termencoding=utf-8
 set encoding=utf-8
