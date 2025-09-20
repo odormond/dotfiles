@@ -136,6 +136,8 @@ set wildignore+=*.tar,*.gz,*.bz2
 set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
 
 ### file / buffer navigation
+# Make jumplist a stack to ease usage
+set jumpoptions=stack
 # automaticallly search bellow the current directory
 set path+=**
 # always make the directory containing the edited file the current dir. Follows focus.
