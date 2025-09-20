@@ -96,6 +96,14 @@ set t_AU=[58;5;%dm  # set * underline colour
 set t_Ts=[9m  # strikethrough start
 set t_Te=[29m  # strikethrough end
 
+# Cursor shape changes to show which mode is active (see :h t_SI)
+set t_SI=[5\ q  # Blinking vertical bar for insert mode
+set t_SR=[3\ q  # Blinking underline for replace mode
+set t_EI=[1\ q  # Blinking block for normal mode
+# Ensure cursor is a blinking block on start or resume
+autocmd vimrc VimEnter,VimResume * silent execute '!echo -ne "\e[1 q"' | redraw!
+# Ensure the cursor is a non-blicking block on exit or suspend
+autocmd vimrc VimLeave,VimSuspend * silent execute '!echo -ne "\e[0 q"'
 
 ## search improvements
 set incsearch
