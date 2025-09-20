@@ -1,6 +1,26 @@
 vim9script
 set runtimepath+=/Users/odie/Devel/python/vpdb
 
+# Reset autocommands from vimrc group such that they get defined only once when re-reading this file.
+augroup vimrc
+  autocmd!
+
+  # automatically reload vimrc when it's saved
+  autocmd BufWritePost .vimrc so ~/.vim/vimrc
+  autocmd BufWritePost vimrc so ~/.vim/vimrc
+
+  # When editing a file, always jump to the last known cursor position.
+  # Don't do it when the position is invalid or when inside an event handler
+  # (happens when dropping a file on gvim).
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  # Detect hcl files and treat them as tf files
+  autocmd BufNewFile,BufRead *.hcl setfiletype tf
+augroup END
+
 # Environment
 if &compatible
   set nocompatible
@@ -270,25 +290,6 @@ g:DVB_TrimWS = true
 # Show changes made to the current buffer that are not saved yet.
 command! DiffOrig vert new | set bt=nofile | r \# | 0d_ | diffthis | wincmd p | diffthis
 
-augroup vimrc
-  autocmd!
-
-  # automatically reload vimrc when it's saved
-  autocmd BufWritePost .vimrc so ~/.vim/vimrc
-  autocmd BufWritePost vimrc so ~/.vim/vimrc
-
-  # When editing a file, always jump to the last known cursor position.
-  # Don't do it when the position is invalid or when inside an event handler
-  # (happens when dropping a file on gvim).
-  autocmd BufReadPost *
-    \ if line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
-
-  # Detect hcl files and treat them as tf files
-  autocmd BufNewFile,BufRead *.hcl setfiletype tf
-augroup END
-
 # personal quick help
 def PersonalHelp()
   var filename = findfile("personal.hlp", &runtimepath)
@@ -373,7 +374,7 @@ def Setup_airline()
   g:airline_section_y = airline#section#create(['ffenc', 'windowswap'])
   g:airline_section_z = airline#section#create(['%3p%% ', 'linenr', ':%3v [%{winnr()}]'])
 enddef
-autocmd User AirlineAfterInit Setup_airline()
+autocmd vimrc User AirlineAfterInit Setup_airline()
 #Plug 'vim-airline/vim-airline'
 
 #====== make . support some more plugin mapping ======
@@ -414,7 +415,7 @@ enddef
 command Gg Git_graph()
 #syn match gitGraphLine /[*|]/
 
-autocmd User BufReadPost */COMMIT_EDITMSG normal gg0
+autocmd vimrc User BufReadPost */COMMIT_EDITMSG normal gg0
 
 #====== git branch viewer for fugitive ======
 #Plug 'rbong/vim-flog'
