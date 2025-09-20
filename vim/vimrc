@@ -33,6 +33,7 @@ set shiftwidth=4
 set nojoinspaces
 set nostartofline
 set autoindent
+set formatoptions=crqnl1j
 def InjectGitBranch(mode: string, is_visual=false)
   var sel_save = &selection
   &selection = "inclusive"
@@ -57,6 +58,7 @@ xnoremap <Leader>b <ScriptCmd>InjectGitBranch(visualmode(), true)<CR>
 # Visuals
 set visualbell
 set title
+set fillchars=vert:\ 
 set foldmethod=syntax
 set foldenable
 set foldlevel=99
@@ -80,11 +82,7 @@ set modelines=5
 set modeline
 set noshowmode
 set showcmd
-if has("patch-8.1.1564")
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+set signcolumn=number
 
 # Enable advanced styling like double / dotted / dashed underline and undercurl
 set t_Us=[4:2m  # double underline
@@ -134,6 +132,7 @@ set wildignore+=*.o,*.a,*.la,*.so
 set wildignore+=*.bmp,*.gif,*.ico,*.jpg,*.jpeg,*.png,*.tiff,*.pdf
 set wildignore+=*.tar,*.gz,*.bz2
 set wildignore+=*/.git/**/*,*/.hg/**/*,*/.svn/**/*
+set grepprg=grep\ -REIns\ --exclude=tags\ --exclude=\"*.swp\"\ --exclude-dir=.git\ $*
 
 ### file / buffer navigation
 # Make jumplist a stack to ease usage
