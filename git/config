@@ -1,33 +1,32 @@
 # This is Git's per-user configuration file.
-# vim:ft=gitconfig
+# vim:ft=gitconfig,sw=4,ts=4,noexpandtab
 [core]
-    excludesfile = /Users/odie/.gitignore
+	excludesfile = /Users/odie/.gitignore
 [user]
-    name = Olivier Dormond
+	name = Olivier Dormond
 [merge]
-    renamelimit = 2000
+	renamelimit = 2000
 [alias]
-    graph = log --graph --oneline --decorate --branches --remotes --tags HEAD
-    changelog = "!f(){ echo \"## Changelog from $1 to $2\" && git log $1...$2 --pretty=format:\" * %s [view commit]($(git config --get remote.origin.url | sed -e's+:+/+' -e's+git@+http://+' -e's+.git+/commits/%H+'))\" | grep -v ^Merged; };f"
-    # restack = "!f(){ git checkout ${2:-HEAD} && branches=$(git rev-list ${1:-master}..HEAD^ | git name-rev --annotate-stdin --name-only | cat -n | awk '$0 !~ /~/ {print \"git branch -f \" $2 \" HEAD~\" $1}') && git rebase ${1:-master} && eval \"$branches\"; };f"
-    restack = rebase --update-refs
+	graph = log --graph --oneline --decorate --branches --remotes --tags HEAD
+	changelog = "!f(){ echo \"## Changelog from $1 to $2\" && git log $1...$2 --pretty=format:\" * %s [view commit]($(git config --get remote.origin.url | sed -e's+:+/+' -e's+git@+http://+' -e's+.git+/commits/%H+'))\" | grep -v ^Merged; };f"
+	restack = rebase --update-refs
 [push]
-    default = current
-    autoSetupRemote = true
-    useForceIfIncludes = true
+	default = current
+	autoSetupRemote = true
+	useForceIfIncludes = true
 [rebase]
-    autosquash = true
-    updateRefs = true
+	autosquash = true
+	updateRefs = true
 [fetch]
-    prune = true
+	prune = true
 [status]
-    showStash = true
+	showStash = true
 [include]
-    path = ~/.dotfiles/git/local
+	path = ~/.dotfiles/git/local
 [filter "lfs"]
-    process = git-lfs filter-process
-    required = true
-    clean = git-lfs clean -- %f
-    smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 [credential "https://github.com"]
-    helper = !/usr/bin/gh auth git-credential
+	helper = !/usr/bin/gh auth git-credential
