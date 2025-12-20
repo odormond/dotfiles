@@ -21,6 +21,7 @@
 	prune = true
 [status]
 	showStash = true
+	submodulesummary = 1
 [include]
 	path = ~/.dotfiles/git/local
 [filter "lfs"]
@@ -30,3 +31,7 @@
 	smudge = git-lfs smudge -- %f
 [credential "https://github.com"]
 	helper = !/usr/bin/gh auth git-credential
+[diff]
+	submodule = log
+[submodule]
+	recurse = true
