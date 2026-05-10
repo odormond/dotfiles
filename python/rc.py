@@ -9,45 +9,6 @@
 
 def startup():
     #
-    #  Command-line completion
-    #
-    try:
-        import readline
-        import rlcompleter  # noqa
-    except ImportError:
-        pass
-    else:
-        import sys
-        import os
-        import atexit
-        if 'libedit' in readline.__doc__:
-            readline.parse_and_bind("bind ^I rl_complete")
-            readline.parse_and_bind("bind ^R em-inc-search-prev")
-            readline.parse_and_bind("bind ^S em-inc-search-next")
-            readline.parse_and_bind("bind ^[[A ed-search-prev-history")
-            readline.parse_and_bind("bind ^[[B ed-search-next-history")
-        else:
-            readline.parse_and_bind("tab: complete")
-            # readline.parse_and_bind("\e[A: history-search-backward")
-            # readline.parse_and_bind("\e[B: history-search-forward")
-        histfile = os.path.join(os.environ["HOME"], ".pyhist")
-        try:
-            readline.read_history_file(histfile)
-        except IOError:
-            pass
-        readline.set_history_length(1000)
-
-        def save_history(filename):
-            history = [readline.get_history_item(i) for i in range(1, readline.get_current_history_length()+1)]
-            readline.clear_history()
-            for line in history:
-                if line.startswith('hashpass'):
-                    line = 'hashpass(...)'
-                readline.add_history(line)
-            return readline.write_history_file(filename)
-        atexit.register(save_history, histfile)
-
-    #
     #  Module auto-loader
     #
     try:
