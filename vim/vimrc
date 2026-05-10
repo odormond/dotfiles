@@ -576,10 +576,10 @@ var lspServers = [
     },
   },
   {
-    name: 'jedils',
+    name: 'zubanls',
     filetype: 'python',
-    path: 'jedi-language-server',
-    args: [],
+    path: 'zuban',
+    args: ["server"],
   },
   {
     name: 'vimls',
