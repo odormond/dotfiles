@@ -611,4 +611,5 @@ enddef
 inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : CheckBackSpace() ? "\<Tab>" : "\<C-x>\<C-o>"
 inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
+filetype plugin indent on
 # vim:ts=2:sw=2
