@@ -581,12 +581,6 @@ var lspServers = [
     path: 'zuban',
     args: ["server"],
   },
-  {
-    name: 'vimls',
-    filetype: 'vim',
-    path: 'vim-language-server',
-    args: ['--stdio'],
-  },
 ]
 autocmd vimrc User LspSetup call LspAddServer(lspServers)
 
