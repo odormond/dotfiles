@@ -32,8 +32,8 @@ def startup():
         __slots__ = []
 
         def __init__(self, name):
-            super(ModuleLoader, self).__init__(name)
-            d = super(ModuleLoader, self).__getattribute__('__dict__')
+            super().__init__(name)
+            d = super().__getattribute__('__dict__')
             d['__name__'] = name
 
         def __repr__(self):
@@ -41,7 +41,7 @@ def startup():
 
         def __getattribute__(self, attr):
             if attr == '__name__':
-                d = super(ModuleLoader, self).__getattribute__('__dict__')
+                d = super().__getattribute__('__dict__')
                 return d['__name__']
             return getattr(loadmodule(self), attr)
 
