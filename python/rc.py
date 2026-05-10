@@ -8,22 +8,17 @@
 #
 
 def startup():
-    #
-    #  Module auto-loader
-    #
-    try:
-        import importlib.machinery
-        ALL_SUFFIXES = importlib.machinery.all_suffixes()
-    except ImportError:
-        import imp
-        ALL_SUFFIXES = [suffix for suffix, mode, typ in imp.get_suffixes()]
     import os
     import sys
     import __main__
     import builtins
+    #
+    #  Module auto-loader
+    #
+    import importlib.machinery
+    ALL_SUFFIXES = importlib.machinery.all_suffixes()
 
     def loadmodule(self):
-        import __main__
         name = self.__name__
         m = __main__.__dict__.get(name)
         if m is self:
@@ -92,9 +87,6 @@ def startup():
     #
     #  Local .pystartup file
     #
-    import os
-    import __main__
-
     startup = '.pystartup'
     if os.path.isfile(startup):
         exec(compile(open(startup).read(), startup, 'exec'), __main__.__dict__)
