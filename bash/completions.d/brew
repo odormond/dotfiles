@@ -1,1 +1,1 @@
-/opt/homebrew/etc/profile.d/bash_completion.sh
+[ -f /opt/homebrew/etc/profile.d/bash_completion.sh ] && source /opt/homebrew/etc/profile.d/bash_completion.sh
