@@ -329,6 +329,9 @@ packadd! comment
 packadd! helptoc
 packadd! matchit
 
+# Disable json filetype hiding quotes
+g:vim_json_conceal = 0
+
 # Specify a directory for plugins
 #plug#begin('~/.vim/plugged')
 
