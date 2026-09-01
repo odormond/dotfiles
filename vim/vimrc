@@ -487,15 +487,15 @@ nnoremap <leader>] :NextUncovered<CR>
 #Plug 'machakann/vim-sandwich'
 g:sandwich_no_default_key_mappings = 1
 
-nmap za <Plug>(sandwich-add)
-xmap za <Plug>(sandwich-add)
-omap za <Plug>(sandwich-add)
-nmap zd <Plug>(sandwich-delete)
-xmap zd <Plug>(sandwich-delete)
-nmap zdb <Plug>(sandwich-delete-auto)
-nmap zr <Plug>(sandwich-replace)
-xmap zr <Plug>(sandwich-replace)
-nmap zrb <Plug>(sandwich-replace-auto)
+nmap Za <Plug>(sandwich-add)
+xmap Za <Plug>(sandwich-add)
+omap Za <Plug>(sandwich-add)
+nmap Zd <Plug>(sandwich-delete)
+xmap Zd <Plug>(sandwich-delete)
+nmap Zdb <Plug>(sandwich-delete-auto)
+nmap Zr <Plug>(sandwich-replace)
+xmap Zr <Plug>(sandwich-replace)
+nmap Zrb <Plug>(sandwich-replace-auto)
 
 #===== peek at registers =====
 #Plug 'junegunn/vim-peekaboo'
@@ -606,4 +606,5 @@ inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : CheckBackSpace() ? "\<Ta
 inoremap <silent><expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 filetype plugin indent on
+
 # vim:ts=2:sw=2
