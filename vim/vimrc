@@ -583,6 +583,9 @@ var lspServers = [
     filetype: 'python',
     path: 'zuban',
     args: ["server"],
+    initializationOptions: {
+      typeCheckingMode: 'off',
+    },
   },
 ]
 autocmd vimrc User LspSetup call LspAddServer(lspServers)
