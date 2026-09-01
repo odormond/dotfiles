@@ -15,7 +15,8 @@
 	autoSetupRemote = true
 	useForceIfIncludes = true
 [rebase]
-	autosquash = true
+	autoSquash = true
+	autoStash = true
 	updateRefs = true
 [fetch]
 	prune = true
