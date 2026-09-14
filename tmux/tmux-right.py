@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /usr/bin/env -S uv run --with psutil --script
 
 import pickle
 import os
@@ -45,7 +45,7 @@ def net_load():
     try:
         prev_recv, prev_sent, t0 = pickle.load(open(STATE_FILENAME, 'rb'))
     except Exception as e:
-        throughput = str(e) 
+        throughput = str(e)
     else:
         delta_recv = recv - prev_recv
         delta_sent = sent - prev_sent
